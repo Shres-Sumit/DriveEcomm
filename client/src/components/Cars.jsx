@@ -14,7 +14,7 @@ const Cars = () => {
 
                     <div className="flex flex-wrap justify-center">
                         {cars.map(car => (
-                            <li className='list-none bg-gray-400 m-2 p-5 w-[calc(50%-1rem)] cursor-pointer rounded-md h-10 hover:bg-gray-600 flex items-center justify-center'>
+                            <li className='list-none bg-gray-400 m-2 p-5 w-[calc(50%-1rem)] cursor-pointer rounded-md h-10 hover:bg-gray-600 flex items-center justify-center hover:duration-150 hover: ease-in-out'>
                                 {car}
                             </li>
                         ))}
