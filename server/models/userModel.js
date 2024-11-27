@@ -24,6 +24,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    userName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    hashPassword: {
+        type: String,
+        required: true
+    },
 
     role: {
         type: Number,

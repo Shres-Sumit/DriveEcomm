@@ -5,6 +5,7 @@ const morgan = require('morgan')
 
 const userRoute = require('./routes/userRoutes')
 const connectDb = require('./config/dbConnect')
+const { authJWT } = require('./helper/jwt')
 
 dotenv.config()
 
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 5050
 
 app.use(express.json())
 app.use(morgan('tiny'))
+app.use(authJWT())
 
 app.use('/user', userRoute)
 

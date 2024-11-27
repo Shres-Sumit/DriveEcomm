@@ -1,12 +1,12 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const { userInfo } = require("../models/userModel");
-const { user } = require('../models/usernameModel');
 
 const userSignIn = async (req, res) => {
     try {
-        const { firstName, lastName, email, phone, address } = req.body
-        if (!firstName || !lastName || !email || !phone || !address) {
+        const { firstName, lastName, email, phone, address, userName, password, confirmPassword } = req.body
+        if (!firstName || !lastName || !email || !phone || !address || !userName || !password || !confirmPassword) {
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required'
@@ -19,50 +19,15 @@ const userSignIn = async (req, res) => {
                 message: 'User with this email already exists'
             });
         }
-        let user = new userInfo({
-            firstName,
-            lastName,
-            email,
-            phone,
-            address,
-        })
 
-
-        user = await user.save()
-
-        if (!user) {
-            return res.status(400).json({ success: false, message: 'cannot register' })
-        }
-
-        res.status(201).json({ success: true, message: 'user regster successfully', user })
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error',
-            error: error.message
-        });
-    }
-}
-
-
-const userNaP = async (req, res) => {
-    try {
-        const { userName, password, confirmPassword } = req.body
-        if (!userName || !password || !confirmPassword) {
-            return res.status(400).json({
-                success: false,
-                message: "Please fill all required fields"
-            });
-        }
         if (password !== confirmPassword) {
             return res.status(400).json({
                 success: false,
                 message: "Passwords do not match"
             });
         }
-        const existingUser = await user.findOne({ userName });
-        if (existingUser) {
+        const existingUserwithuserName = await userInfo.findOne({ userName });
+        if (existingUserwithuserName) {
             return res.status(400).json({
                 success: false,
                 message: "Username already exists"
@@ -74,10 +39,16 @@ const userNaP = async (req, res) => {
                 message: "Password must be at least 6 characters long"
             });
         }
-        const newUser = new user({
+        let newUser = new userInfo({
+            firstName,
+            lastName,
+            email,
+            phone,
+            address,
             userName,
             hashPassword: bcrypt.hashSync(password, 10)
-        });
+        })
+
 
         const savedUser = await newUser.save();
 
@@ -97,13 +68,49 @@ const userNaP = async (req, res) => {
             message: 'User created successfully',
             user: userResponse
         });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+}
 
 
+
+
+const userLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required'
+            });
+        }
+        const user = await userInfo.findOne({ email })
+        if (!user) {
+            return res.status(400).send({ message: "user not found" })
+        }
+
+        if (user && bcrypt.compareSync(password, user.hashPassword)) {
+            const token = jwt.sign({
+                userId: user._id,
+                role: user.role
+            }, process.env.Secret,
+                { expiresIn: '7d' })
+
+            res.status(200).send({ user: user.email, token: token })
+        }
+        else {
+            res.status(400).send('password is wrong!');
+        }
     } catch (error) {
         console.log(error)
         res.status(400).json({ success: false, message: 'Internal server error', error: error.message })
     }
-
 }
 
-module.exports = { userSignIn, userNaP }
+module.exports = { userSignIn, userLogin }
