@@ -1,4 +1,3 @@
-const express = require('express')
 const multer = require('multer')
 
 const FILE_TYPE_MAP = {
@@ -7,17 +6,22 @@ const FILE_TYPE_MAP = {
     'image/jpg': 'jpg'
 }
 
+
 const storage = multer.diskStorage({
-    destinaion: function (req, file, cb) {
+    destination: function (req, file, cb) {
         const isValid = FILE_TYPE_MAP[file.mimetype]
         let uploadError = new Error('invalid image type')
+        console.log(`1 ${file}`)
+        console.log(`2 ${file.mimetype}`)
+        console.log(`3 ${isValid}`)
         if (isValid) {
             uploadError = null
         }
-        cb(uploadError, 'public')
+        cb(uploadError, 'public/uploads')
     },
     filename: function (req, file, cb) {
-        const filename = file.originalname.split(" ").join("-")
+        const filename = file.originalname.split(" ").join
+            ("-")
         console.log(filename)
         const extension = FILE_TYPE_MAP[file.mimetype]
         cb(null, `${filename}-${Date.now()}.${extension}`)
@@ -25,14 +29,17 @@ const storage = multer.diskStorage({
 
 })
 
+
 const uploadOptions = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-        const isValid = !FILE_TYPE_MAP[file.mimetype]
+        // Corrected validation logic
+        const isValid = !!FILE_TYPE_MAP[file.mimetype]
         if (isValid) {
+            cb(null, true)
+        } else {
             cb(new Error('Invalid file type'), false)
         }
-        cb(null, isValid)
     }
 })
 

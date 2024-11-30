@@ -10,6 +10,8 @@ function authJWT() {
         path: [
             { url: /\/check-file(.*)/, method: ['GET', 'OPTIONS'] },
             { url: /\/public(.*)/, method: ['GET', 'OPTIONS'] },
+            { url: /\/car(.*)/, method: ['GET', 'OPTIONS'] },
+
 
 
             { url: /\/user\/login/, method: ['POST', 'OPTIONS'] },

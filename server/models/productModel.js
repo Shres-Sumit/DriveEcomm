@@ -13,6 +13,11 @@ const carProductSchema = new mongoose.Schema({
     },
     slug: {
         type: String,
+        lowercase: true
+    },
+    description: {
+        type: String,
+        required: true
     },
     year: {
         type: Number,
@@ -31,7 +36,7 @@ const carProductSchema = new mongoose.Schema({
     },
     class: {
         type: String,
-        required: true,
+        default: 'normal'
 
     },
     mileage: {

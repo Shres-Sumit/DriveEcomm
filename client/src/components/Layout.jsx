@@ -1,7 +1,5 @@
 import React from 'react'
-import { FaSearch } from "react-icons/fa";
-import { BsCart2 } from "react-icons/bs";
-import { CiLogin } from "react-icons/ci";
+
 import Header from './Header';
 import Footer from './Footer';
 
