@@ -102,7 +102,7 @@ const userLogin = async (req, res) => {
             }, process.env.Secret,
                 { expiresIn: '7d' })
 
-            res.status(200).send({ user: user.email, token: token })
+            res.status(200).send({ success: true, user: user.email, token: token })
         }
         else {
             res.status(400).send('password is wrong!');

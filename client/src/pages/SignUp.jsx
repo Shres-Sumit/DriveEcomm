@@ -1,7 +1,11 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const SignUp = () => {
+    const navigate = useNavigate()
     const [datas, setdata] = useState({
         firstName: "",
         lastName: "",
@@ -28,6 +32,10 @@ const SignUp = () => {
             const { data } = await axios.post(`/user/signup`, datas)
             if (data.success) {
                 console.log(data)
+                navigate('/login')
+                toast.success('user created successfully', {
+                    duration: 5000
+                })
             }
         } catch (error) {
             console.log(error)
@@ -38,10 +46,14 @@ const SignUp = () => {
             } else {
                 setError('Error in request setup')
             }
+
         }
     }
     return (
         <>
+            <Toaster />
+
+
             <div className="min-h-screen flex items-center justify-center bg-gray-200">
                 <div className="w-full max-w-md bg-white rounded-lg shadow-2xl">
                     <form className="max-w-md mx-auto p-8" onSubmit={handleSubmit}>
@@ -51,6 +63,7 @@ const SignUp = () => {
                                 <span className="block sm:inline">{error}</span>
                             </div>
                         )}
+
                         <div className="grid md:grid-cols-2 md:gap-8">
                             <div className="relative z-0 w-full mb-8 group">
                                 <input type="text" name="firstName" value={datas.firstName} id="firstName" className="block py-4 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required onChange={handleChane} />

@@ -1,75 +1,102 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
+    const [datas, setdata] = useState({
+        email: "",
+        password: "",
+    })
+    const [error, setError] = useState('')
+    console.log(datas)
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            const { data } = await axios.post(`/user/login`, datas)
+            console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-200  p-4 ">
-            <div className="w-full max-w-md bg-white rounded-lg shadow-2xl ">
-                <div className="p-6 border-b border-gray-200 ">
-                    <h2 className="text-2xl font-bold text-center text-gray-900 ">Login</h2>
-                </div>
-
-                <div className="p-6">
-                    <form className="space-y-4">
-                        <div className="space-y-2">
-                            <label
-                                htmlFor="email"
-                                className="block text-sm font-medium  text-gray-900"
-                            >
-                                Email
-                            </label>
-                            <input
-                                id="email"
-                                type="email"
-                                placeholder="name@example.com"
-                                required
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent   text-sm"
-                            />
+        <>
+            <Toaster />
+            <form className="max-w-md mx-auto p-8" onSubmit={handleSubmit}>
+                <div className="min-h-screen flex items-center justify-center bg-gray-200  p-4 ">
+                    <div className="w-full max-w-md bg-white rounded-lg shadow-2xl ">
+                        <div className="p-6 border-b border-gray-200 ">
+                            <h2 className="text-2xl font-bold text-center text-gray-900 ">Login</h2>
                         </div>
 
-                        <div className="space-y-2">
-                            <label
-                                htmlFor="password"
-                                className="block text-sm font-medium text-gray-900"
-                            >
-                                Password
-                            </label>
-                            <input
-                                id="password"
-                                type="password"
-                                required
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                            />
-                        </div>
+                        <div className="p-6">
+                            <form className="space-y-4">
+                                <div className="space-y-2">
+                                    <label
+                                        htmlFor="email"
+                                        className="block text-sm font-medium  text-gray-900"
+                                    >
+                                        Email
+                                    </label>
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        placeholder="name@example.com"
+                                        required
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent   text-sm"
+                                    />
+                                </div>
 
-                        <div className="flex items-center space-x-2">
-                            <input
-                                type="checkbox"
-                                id="remember"
-                                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600"
-                            />
-                            <label
-                                htmlFor="remember"
-                                className="text-sm font-medium text-gray-700  cursor-pointer"
-                            >
-                                Remember me
-                            </label>
-                        </div>
+                                <div className="space-y-2">
+                                    <label
+                                        htmlFor="password"
+                                        className="block text-sm font-medium text-gray-900"
+                                    >
+                                        Password
+                                    </label>
+                                    <input
+                                        id="password"
+                                        type="password"
+                                        required
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                                    />
+                                </div>
 
-                        <button
-                            type="submit"
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors dark:bg-blue-600 dark:hover:bg-blue-700"
-                        >
-                            Sign in
-                        </button>
+                                <div className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        id="remember"
+                                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600"
+                                    />
+                                    <label
+                                        htmlFor="remember"
+                                        className="text-sm font-medium text-gray-700  cursor-pointer"
+                                    >
+                                        Remember me
+                                    </label>
+                                </div>
 
-                        <div className=' space-x-2'>
-                            <span>If not register <Link className='cursor-pointer hover:underline font-bold text-lg  hover:text-blue-600' to={'/signup'}>Click here...</Link></span>
+                                <button
+                                    type="submit"
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors dark:bg-blue-600 dark:hover:bg-blue-700"
+                                >
+                                    Sign in
+                                </button>
+
+                                <div className=' space-x-2'>
+                                    <span>If not register <Link className='cursor-pointer hover:underline font-bold text-lg  hover:text-blue-600' to={'/signup'} >Click here...</Link></span>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
-            </div >
-        </div >
+                    </div >
+                </div >
+            </form>
+
+        </>
+
     );
 };
 
