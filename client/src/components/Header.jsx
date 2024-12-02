@@ -4,11 +4,19 @@ import { CiLogin } from 'react-icons/ci'
 import { FaSearch } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { FaCar } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
+
+
+
+import { useAuth } from '../Context/Auth'
 
 
 
 
 const Header = () => {
+    const [auth, setAuth] = useAuth()
+    console.log(auth)
+
     return (
         <>
             <nav className="shadow-xl max-w-[99%] mx-auto bg-gray-300  rounded-sm">
@@ -51,12 +59,22 @@ const Header = () => {
 
 
                             </div>
-                            <div>
-                                <Link to="/login" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">
-                                    <CiLogin className="text-2xl mb-1" />
-                                    <span className="text-xl">Sign in</span>
-                                </Link>
-                            </div>
+                            {
+                                auth.token ? <div>
+                                    <Link to="/login" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">
+                                        <FaUserCircle className="text-2xl mb-1" />
+
+                                        <span className="text-xl">{auth?.user?.userName} </span>
+                                    </Link>
+                                </div> :
+                                    <div>
+                                        <Link to="/login" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">
+                                            <CiLogin className="text-2xl mb-1" />
+                                            <span className="text-xl">Sign in</span>
+                                        </Link>
+                                    </div>
+                            }
+
                         </div>
                     </div>
                 </div>
