@@ -1,4 +1,6 @@
 const slugify = require('slugify')
+const path = require('path');
+const fs = require('fs')
 
 
 const CarProduct = require("../models/productModel")
@@ -16,8 +18,7 @@ const createProduct = async (req, res) => {
         if (!file) return res.status(400).send('No image in the request')
         const filename = file.filename
 
-        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/
-        `
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
         let car = new CarProduct({
             title,
             model,
@@ -57,4 +58,18 @@ const getAllProduct = async (req, res) => {
     }
 }
 
-module.exports = { createProduct, getAllProduct }
+const getImageProduct = async (req, res) => {
+    const filename = req.params.filename
+    console.log(filename)
+    const imagePath = path.join(__dirname, 'public/uploads', filename)
+    console.log(imagePath)
+    fs.access(imagePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            return res.status(400).json({ message: 'Image not found' })
+        }
+
+        res.sendFile(imagePath)
+    })
+}
+
+module.exports = { createProduct, getAllProduct, getImageProduct }

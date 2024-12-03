@@ -7,13 +7,8 @@ const userRoute = express.Router()
 userRoute.post('/signup', userSignIn)
 userRoute.post('/login', userLogin)
 userRoute.get('/getAllUser', requireSign, isAdmin, getAllUser)
-userRoute.get('/admin-auth', (req, res) => {
-    try {
-
-    }
-    catch (err) {
-        res.status(500).json({ Ok: false, message: 'Server error' });
-    }
+userRoute.get('/admin-auth', requireSign, isAdmin, (req, res) => {
+    res.status(200).send({ Ok: true })
 })
 
 

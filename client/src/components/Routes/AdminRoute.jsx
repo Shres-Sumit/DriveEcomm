@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../Context/Auth'
 import axios from 'axios'
+import { Outlet } from 'react-router-dom'
 
 const AdminRoute = () => {
     const [ok, setOk] = useState(false)
@@ -9,7 +10,7 @@ const AdminRoute = () => {
     useEffect(() => {
         const authCheck = async () => {
             console.log(auth)
-            const { data } = await axios.get('/user', {
+            const { data } = await axios.get('/user/admin-auth', {
                 headers: {
                     Authorization: `${auth.token}`
                 }
@@ -23,6 +24,7 @@ const AdminRoute = () => {
         if (auth?.token) authCheck()
     }, [auth?.token])
     return ok ? <Outlet /> : 'loading'
+
 }
 
 export default AdminRoute

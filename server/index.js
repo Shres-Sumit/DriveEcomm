@@ -2,6 +2,7 @@ const express = require('express')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
 const cors = require('cors')
+const path = require('path');
 
 
 
@@ -9,7 +10,7 @@ const connectDb = require('./config/dbConnect')
 const { authJWT } = require('./helper/jwt')
 
 const userRoute = require('./routes/userRoutes')
-const productRoute = require('./routes/productRoute')
+const { productRoute, imageRoute } = require('./routes/productRoute')
 
 
 dotenv.config()
@@ -27,10 +28,13 @@ app.use(cors({
     credentials: true
 }))
 app.use(morgan('tiny'))
+app.use('/public/uploads', express.static(path.join(__dirname, 'public/uploads')))
 // app.use(authJWT())
 
 app.use('/user', userRoute)
 app.use('/car', productRoute)
+app.use('/', imageRoute)
+
 
 
 app.listen(5050, () => {
