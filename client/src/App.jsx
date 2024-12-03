@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast';
 import { useAuth } from './Context/Auth'
 import AdminHome from './pages/Admin/AdminHome'
 import UserHome from './pages/User/UserHome'
+import AdminRoute from './components/Routes/AdminRoute'
 
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={
+        {/* <Route path='/' element={
           isAuthenticated ? (
             auth.user.role === 1 ? (
               <AdminHome />
@@ -25,12 +26,15 @@ function App() {
               <UserHome />
             )
           ) : (
-            // <Home /> 
-            null
+            <Home />
+
           )
 
-        } />
+        } /> */}
+        <Route path='/' element={<AdminRoute />}>
+          <Route path='admin' element={<AdminHome />} />
 
+        </Route>
 
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<Login />} />

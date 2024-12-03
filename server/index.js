@@ -27,7 +27,7 @@ app.use(cors({
     credentials: true
 }))
 app.use(morgan('tiny'))
-app.use(authJWT())
+// app.use(authJWT())
 
 app.use('/user', userRoute)
 app.use('/car', productRoute)

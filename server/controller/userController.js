@@ -98,11 +98,11 @@ const userLogin = async (req, res) => {
         if (user && bcrypt.compareSync(password, user.hashPassword)) {
             const token = jwt.sign({
                 userId: user._id,
-                role: user.role
             }, process.env.Secret,
                 { expiresIn: '7d' })
 
             res.status(200).send({ success: true, user: user, token: token })
+            console.log(req.user)
         }
         else {
             res.status(400).send('password is wrong!');
@@ -112,5 +112,20 @@ const userLogin = async (req, res) => {
         res.status(400).json({ success: false, message: 'Internal server error', error: error.message })
     }
 }
+const getAllUser = async (req, res) => {
 
-module.exports = { userSignIn, userLogin }
+    // console.log(req.user)
+    try {
+        const users = await userInfo.find()
+        if (!users || !users.length === 0) {
+            return res.status(400).json({ success: false, message: 'no users' })
+        }
+        res.status(200).json({ success: true, users })
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ success: false, message: 'Internal server error', error: error.message })
+    }
+}
+
+module.exports = { userSignIn, userLogin, getAllUser }
