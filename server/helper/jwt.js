@@ -28,9 +28,9 @@ const { userInfo } = require("../models/userModel")
 const requireSign = async (req, res, next) => {
     try {
         const decode = JWT.verify(req.headers.authorization, process.env.Secret)
-        console.log(decode)
+        // console.log(decode)
         userId = decode.userId
-        console.log(userId)
+        // console.log(userId)
         next()
     } catch (error) {
         console.log(error);
@@ -40,7 +40,7 @@ const requireSign = async (req, res, next) => {
 
 
 const isAdmin = async (req, res, next) => {
-    console.log(userId)
+    // console.log(userId)
 
     try {
         const userOne = await userInfo.findById(userId)

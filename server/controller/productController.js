@@ -49,7 +49,7 @@ const getAllProduct = async (req, res) => {
         if (!productList) {
             res.status(500).json({ success: false })
         }
-        res.status(200).send(productList);
+        res.status(200).send({ success: true, productList });
     }
 
     catch (error) {

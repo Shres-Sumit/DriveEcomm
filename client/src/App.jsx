@@ -10,6 +10,8 @@ import UserHome from './pages/User/UserHome'
 import AdminRoute from './components/Routes/AdminRoute'
 import CreateProduct from './pages/Admin/CreateProduct'
 
+import CarList from './pages/CarList'
+
 
 function App() {
   const [auth, setAuth] = useAuth()
@@ -35,6 +37,8 @@ function App() {
           <Route path='create-product' element={<CreateProduct />} />
         </Route>
 
+
+        <Route path='/c' element={<CarList />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<Login />} />
 

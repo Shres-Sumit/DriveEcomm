@@ -74,11 +74,7 @@ const CarForm = () => {
             console.log(`${key}:`, value);
         }
         try {
-            const { data } = await axios.post('/car/create-product', formDataForUpload, {
-                headers: {
-                    Authorization: auth?.token
-                }
-            })
+            const { data } = await axios.post('/car/create-product', formDataForUpload)
             if (data?.success) {
                 console.log(`car created`)
             }

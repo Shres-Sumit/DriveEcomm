@@ -9,7 +9,7 @@ const CarModify = () => {
                 <h1 className='text-5xl'>Car Modification</h1>
                 <div className='flex gap-3'>
                     <Link className='bg-green-400 p-3 cursor-pointer hover:bg-green-600' to={'/admin/create-product'}>Create</Link>
-                    <Link className='bg-yellow-400 p-3 cursor-pointer hover:bg-yellow-600'>Show All Cars</Link>
+                    <Link className='bg-yellow-400 p-3 cursor-pointer hover:bg-yellow-600 ' >Show All Cars</Link>
                     <Link className='bg-blue-400 p-3 cursor-pointer hover:bg-blue-600'>Edit</Link>
                     <Link className='bg-red-400 p-3 cursor-pointer hover:bg-red-600'>Delete</Link>
                 </div>

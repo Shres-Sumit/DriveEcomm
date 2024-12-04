@@ -9,12 +9,8 @@ const AdminRoute = () => {
 
     useEffect(() => {
         const authCheck = async () => {
-            console.log(auth)
-            const { data } = await axios.get('/user/admin-auth', {
-                headers: {
-                    Authorization: `${auth.token}`
-                }
-            })
+            // console.log(auth)
+            const { data } = await axios.get('/user/admin-auth')
             if (data.Ok) {
                 setOk(true)
             } else {
