@@ -34,7 +34,7 @@ const carProductSchema = new mongoose.Schema({
         required: true,
         min: 0
     },
-    class: {
+    vehicleType: {
         type: String,
         default: 'normal'
 

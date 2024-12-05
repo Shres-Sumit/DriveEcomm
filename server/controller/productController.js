@@ -7,8 +7,8 @@ const CarProduct = require("../models/productModel")
 
 const createProduct = async (req, res) => {
     try {
-        const { title, model, year, color, price, description } = req.body
-        if (!title || !model || !year || !color || !price || !description) {
+        const { title, model, year, color, price, description, milaege, fuelType, transmission, vehicleType } = req.body
+        if (!title || !model || !year || !color || !price || !description || milaege || fuelType || transmission) {
             res.status(400).json({ success: false, message: "please fill all the fields" })
         }
 

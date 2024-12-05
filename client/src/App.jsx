@@ -11,6 +11,7 @@ import AdminRoute from './components/Routes/AdminRoute'
 import CreateProduct from './pages/Admin/CreateProduct'
 
 import CarList from './pages/CarList'
+import CarDetail from './pages/CarDetail'
 
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
 
 
         <Route path='/c' element={<CarList />} />
+        <Route path='/c/:slug' element={<CarDetail />} />
+
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<Login />} />
 
