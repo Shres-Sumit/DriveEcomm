@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../Context/Auth';
+import toast, { Toaster } from 'react-hot-toast';
 
 const CarForm = () => {
     const [formData, setFormData] = useState({
@@ -10,6 +11,11 @@ const CarForm = () => {
         color: '',
         price: '',
         description: '',
+        fuelType: '',
+        transmission: '',
+        vehicleType: '',
+        mileage: ''
+
     });
     const [auth] = useAuth()
 
@@ -17,6 +23,9 @@ const CarForm = () => {
     const [imagePreview, setImagePreview] = useState(null);
 
     const fileInputRef = useRef(null);
+
+    const fuelTypeOptions = ['Gasoline', 'Diesel', 'Electric', 'Hybrid', 'Hydrogen']
+    const transmissionOptions = ['Automatic', 'Manual', 'CVT']
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -78,6 +87,23 @@ const CarForm = () => {
             if (data?.success) {
                 console.log(`car created`)
             }
+            setFormData({
+                title: '',
+                model: '',
+                year: '',
+                color: '',
+                price: '',
+                description: '',
+                fuelType: '',
+                transmission: '',
+                vehicleType: '',
+                mileage: ''
+            })
+            setImageFile(null)
+            toast.success(`car created`, {
+                duration: 3000
+            })
+
         } catch (error) {
             console.log(error)
         }
@@ -88,7 +114,7 @@ const CarForm = () => {
     return (
         <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Car Listing Form</h2>
-
+            <Toaster />
 
 
             <form
@@ -158,6 +184,53 @@ const CarForm = () => {
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Enter car color"
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="fuelType" className="block text-sm font-medium text-gray-700 mb-1">Fuel Type</label>
+                    <select
+                        id='fuelType'
+                        name='fuelType'
+                        value={formData.fuelType}
+                        onChange={handleChange}
+                        className='w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                        required
+                    >
+                        <option value="" disabled>Select Fuel Type</option>
+                        {
+                            fuelTypeOptions.map((type) => (
+                                <option key={type} value={type}>{type}</option>
+                            ))
+                        }
+
+                    </select>
+                </div>
+                <div>
+                    <label htmlFor="transmission" className="block text-sm font-medium text-gray-700 mb-1">
+                        Transmission
+                    </label>
+                    {
+                        transmissionOptions.map((type) => (
+                            <div class="flex items-center mb-4" key={type}>
+                                <input id={type} type="radio" value={type} name='transmission' onChange={handleChange} class="w-4 h-4 " required />
+                                <label for={type} class="ms-2 text-sm font-medium text-gray-900">{type}</label>
+                            </div>
+                        ))
+                    }
+                </div>
+                <div>
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+                        Class
+                    </label>
+                    <input
+                        type="text"
+                        id="vehicleType"
+                        name="vehicleType"
+                        value={formData.vehicleType}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter listing title"
                         required
                     />
                 </div>
@@ -233,6 +306,21 @@ const CarForm = () => {
                             </div>
                         )}
                     </div>
+                </div>
+                <div>
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+                        Mileage
+                    </label>
+                    <input
+                        type="text"
+                        id="mileage"
+                        name="mileage"
+                        value={formData.migle}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Enter listing mileage"
+                        required
+                    />
                 </div>
 
                 <div>

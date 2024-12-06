@@ -7,9 +7,9 @@ const CarProduct = require("../models/productModel")
 
 const createProduct = async (req, res) => {
     try {
-        const { title, model, year, color, price, description, milaege, fuelType, transmission, vehicleType } = req.body
-        if (!title || !model || !year || !color || !price || !description || milaege || fuelType || transmission) {
-            res.status(400).json({ success: false, message: "please fill all the fields" })
+        const { title, model, year, color, price, description, mileage, fuelType, transmission, vehicleType } = req.body
+        if (!title || !model || !year || !color || !price || !description || !mileage || !fuelType || !transmission) {
+            return res.status(400).json({ success: false, message: "please fill all the fields" })
         }
 
         const file = req.file;
@@ -27,7 +27,10 @@ const createProduct = async (req, res) => {
             price,
             description,
             slug: slugify(title),
-            image: `${basePath}${filename}`
+            image: `${basePath}${filename}`,
+            fuelType,
+            transmission,
+            vehicleType
         })
         car = await car.save()
         if (!car)
