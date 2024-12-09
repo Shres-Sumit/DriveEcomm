@@ -15,11 +15,10 @@ import { useAuth } from '../Context/Auth'
 
 const Header = () => {
     const [auth, setAuth] = useAuth()
-    console.log(auth)
 
     return (
         <>
-            <nav className="shadow-xl max-w-[99%] mx-auto bg-gray-300  rounded-sm">
+            <nav className="shadow-xl max-w-[99%] mx-auto bg-gray-300  rounded-sm mb-[20px]">
                 <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                     <div className="relative flex h-16 items-center justify-between">
 

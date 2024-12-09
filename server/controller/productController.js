@@ -75,4 +75,17 @@ const getImageProduct = async (req, res) => {
     })
 }
 
-module.exports = { createProduct, getAllProduct, getImageProduct }
+const getProductBySlug = async (req, res) => {
+    try {
+        const car = await CarProduct.findOne({ slug: req.params.slug })
+        if (!car) {
+            return res.status(404).json({ success: false, message: 'car is existed' })
+        }
+        res.status(200).json({ success: true, car })
+    } catch (error) {
+        console.log(error)
+        es.status(500).json({ success: false, message: 'Server error', error: error.message })
+    }
+}
+
+module.exports = { createProduct, getAllProduct, getImageProduct, getProductBySlug }
