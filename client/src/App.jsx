@@ -12,6 +12,7 @@ import CreateProduct from './pages/Admin/CreateProduct'
 
 import CarList from './pages/CarList'
 import CarDetail from './pages/CarDetail'
+import ScrollToTop from './Context/ScrollToTop'
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <>
+      <ScrollToTop />
       <Routes>
         <Route path='/' element={
           isAuthenticated ? (
