@@ -29,8 +29,8 @@ const requireSign = async (req, res, next) => {
     try {
         const decode = JWT.verify(req.headers.authorization, process.env.Secret)
         // console.log(decode)
-        userId = decode.userId
-        // console.log(userId)
+        req.userId = decode.userId
+        console.log(req.userId)
         next()
     } catch (error) {
         console.log(error);
@@ -43,7 +43,7 @@ const isAdmin = async (req, res, next) => {
     // console.log(userId)
 
     try {
-        const userOne = await userInfo.findById(userId)
+        const userOne = await userInfo.findById(req.userId)
         if (!userOne) {
             return res.status(400).send({
                 success: false,
