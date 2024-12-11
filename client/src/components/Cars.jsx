@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import { useSearch } from '../Context/Auth'
 
 const Cars = () => {
 
     const [carsList, setCarsList] = useState([])
+    const [search, setSearch] = useSearch()
 
     const getAllCars = async () => {
         try {
@@ -30,7 +32,7 @@ const Cars = () => {
 
                     <div className="flex flex-wrap justify-center">
                         {carsList.map(car => (
-                            <li className='list-none bg-gray-400 m-2 p-5 w-[calc(50%-1rem)] cursor-pointer rounded-md h-10 hover:bg-gray-600 flex items-center justify-center hover:duration-150 hover: ease-in-out'>
+                            <li className='list-none bg-gray-400 m-2 p-5 w-[calc(50%-1rem)] cursor-pointer rounded-md h-10 hover:bg-gray-600 flex items-center justify-center hover:duration-150 hover: ease-in-out ' key={car._id}>
                                 {car.color}
                             </li>
                         ))}

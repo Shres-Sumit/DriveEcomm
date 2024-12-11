@@ -2,12 +2,14 @@ import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const authContext = createContext()
+const SearchContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({
         user: null,
         token: ""
     })
+
 
     axios.defaults.headers.common["Authorization"] = auth?.token
 
@@ -31,6 +33,21 @@ const AuthProvider = ({ children }) => {
     )
 }
 
+const SearchProvider = ({ children }) => {
+    const [search, setSearch] = useState("");
+
+
+    return (
+        <SearchContext.Provider value={[search, setSearch]}>
+            {children}
+        </SearchContext.Provider>
+    );
+};
+
 const useAuth = () => useContext(authContext)
 
-export { useAuth, AuthProvider }
+const useSearch = () => useContext(SearchContext)
+
+
+
+export { useAuth, AuthProvider, SearchProvider, useSearch }

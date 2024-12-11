@@ -9,18 +9,7 @@ const Coursel = () => {
                 <div className="hidden duration-700 ease-in-out" data-carousel-item>
                     <img src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
                 </div>
-                {/* <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                    <img src="/docs/images/carousel/carousel-2.svg" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                </div>
-                <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                    <img src="/docs/images/carousel/carousel-3.svg" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                </div>
-                <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                    <img src="/docs/images/carousel/carousel-4.svg" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                </div>
-                <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                    <img src="/docs/images/carousel/carousel-5.svg" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                </div> */}
+
             </div>
             <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
                 <button type="button" className="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
