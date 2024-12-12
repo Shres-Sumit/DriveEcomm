@@ -87,17 +87,25 @@ const getProductBySlug = async (req, res) => {
         es.status(500).json({ success: false, message: 'Server error', error: error.message })
     }
 }
-
-const getOne = async (req, res) => {
+const getOneCar = async (req, res) => {
     try {
-        const { title } = req.query
-        const car = await CarProduct.find({ title })
-        if (!car) return res.status(400).json({ success: false, message: 'no car found' })
-
-        res.send({ success: true, message: 'requested car found', car })
+        const { title } = req.params
+        const encodedTitle = encodeURIComponent(title);
+        console.log(encodedTitle)
+        const cars = await CarProduct.find({
+            title: {
+                $regex: decodeURIComponent(encodedTitle), $options: "i"
+            }
+        })
+        if (!cars || cars.length === 0) {
+            return res.status(404).json({ success: false, message: 'No cars found' });
+        }
+        res.status(200).json({ success: true, productList: cars });
     } catch (error) {
         console.log(error)
     }
 }
 
-module.exports = { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOne }
+
+
+module.exports = { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOneCar }

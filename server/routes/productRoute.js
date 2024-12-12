@@ -1,5 +1,5 @@
 const express = require('express')
-const { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOne } = require('../controller/productController')
+const { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOneCar } = require('../controller/productController')
 const uploadOptions = require('../upload/uploader')
 
 
@@ -10,13 +10,15 @@ productRoute.post('/create-product', uploadOptions.single('image'), createProduc
 
 productRoute.get('/getAllcars', getAllProduct)
 
-imageRoute.get('/public/upload/:filename', getImageProduct)
+productRoute.get('/getOneCar/:title', getOneCar)
 
-productRoute.get('/getOne', getOne)
+
+
 
 productRoute.get('/:slug', getProductBySlug)
 
 
+imageRoute.get('/public/upload/:filename', getImageProduct)
 
 
 
