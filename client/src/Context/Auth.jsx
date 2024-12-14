@@ -34,11 +34,11 @@ const AuthProvider = ({ children }) => {
 }
 
 const SearchProvider = ({ children }) => {
-    const [search, setSearch] = useState("");
+    const [searchResults, setSearchResults] = useState([])
 
 
     return (
-        <SearchContext.Provider value={[search, setSearch]}>
+        <SearchContext.Provider value={[searchResults, setSearchResults]}>
             {children}
         </SearchContext.Provider>
     );

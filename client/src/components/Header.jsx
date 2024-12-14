@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BsCart2 } from 'react-icons/bs'
 import { CiLogin } from 'react-icons/ci'
 import { FaSearch } from 'react-icons/fa'
@@ -9,6 +9,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 
 import { useAuth, useSearch } from '../Context/Auth'
+import axios from 'axios'
 
 
 
@@ -16,7 +17,21 @@ import { useAuth, useSearch } from '../Context/Auth'
 const Header = () => {
     const navigate = useNavigate()
     const [auth, setAuth] = useAuth()
-    const [search, setSearch] = useSearch()
+    const [search, setSearch] = useState('')
+    const [searchResults, setSearchResults] = useSearch()
+
+    const handleSearch = async (e) => {
+        try {
+            if (search) {
+                const { data } = await axios.get(`/car/getOneCar/${search}`)
+                setSearchResults(data.productList || [])
+                navigate(`/search/${search}`)
+            }
+        } catch (error) {
+            console.error('Search error:', error)
+            setSearchResults(null)
+        }
+    }
 
     return (
         <>
@@ -38,7 +53,7 @@ const Header = () => {
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
-                                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-xl" onClick={() => navigate('/search')} />
+                                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-xl cursor-pointer" onClick={handleSearch} />
                             </div>
                         </div>
 

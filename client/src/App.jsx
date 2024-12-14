@@ -44,7 +44,7 @@ function App() {
 
         <Route path='/c' element={<CarList />} />
         <Route path='/c/:slug' element={<CarDetail />} />
-        <Route path='/search' element={<SearchCom />} />
+        <Route path='/search/:search' element={<SearchCom />} />
 
 
         <Route path='/signup' element={<SignUp />} />
