@@ -6,7 +6,6 @@ import { useSearch } from '../Context/Auth'
 const Cars = () => {
 
     const [carsList, setCarsList] = useState([])
-    const [search, setSearch] = useSearch()
 
     const getAllCars = async () => {
         try {
