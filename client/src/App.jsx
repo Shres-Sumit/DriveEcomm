@@ -14,6 +14,7 @@ import CarList from './pages/CarList'
 import CarDetail from './pages/CarDetail'
 import ScrollToTop from './Context/ScrollToTop'
 import SearchCom from './pages/SearchCom'
+import Cart from './pages/User/Cart'
 
 
 function App() {
@@ -40,6 +41,16 @@ function App() {
         <Route path="/admin" element={<AdminRoute />}>
           <Route path='create-product' element={<CreateProduct />} />
         </Route>
+
+
+
+        <Route path='/shop' element={
+          isAuthenticated ? (
+            <Cart />
+          ) : (
+            <Login />
+          )
+        } />
 
 
         <Route path='/c' element={<CarList />} />

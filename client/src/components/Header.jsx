@@ -67,9 +67,9 @@ const Header = () => {
 
                             </div>
                             <div className="flex ">
-                                <Link to="#" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">
+                                <Link to="/shop" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">
                                     <BsCart2 className="text-2xl mb-1 " />
-                                    <span className="text-xl"> Carts</span>
+                                    <span className="text-xl "> Carts</span>
                                 </Link>
 
 

@@ -3,12 +3,14 @@ import Layout from '../components/Layout'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import TestDriveBookingModal from '../components/TestDriveBookingModal'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../feature/cart/cartSlice'
 
 const CarDetail = () => {
     const { slug } = useParams()
     const [carDetails, setCarDetails] = useState(null)
     const [isModalOpen, setIsModalOpen] = useState(false);
-    console.log(slug)
+    const dispatch = useDispatch()
 
     async function getCarDetail() {
         try {
@@ -23,6 +25,10 @@ const CarDetail = () => {
     const handleBookDrive = (date) => {
         console.log('Test drive booked for:', date);
     };
+
+    function handleAddToCart() {
+        dispatch(addToCart({ carDetails }))
+    }
     useEffect(() => {
         getCarDetail()
     }, [])
@@ -77,7 +83,7 @@ const CarDetail = () => {
 
                             {/* Action Buttons */}
                             <div className="flex space-x-4">
-                                <button className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">
+                                <button className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition" onClick={handleAddToCart}>
                                     Add to Cart
                                 </button>
                                 <button className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition" onClick={() => setIsModalOpen(true)}>
