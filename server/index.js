@@ -12,6 +12,7 @@ const { authJWT } = require('./helper/jwt')
 const userRoute = require('./routes/userRoutes')
 const { productRoute, imageRoute } = require('./routes/productRoute');
 const OrderRoute = require('./routes/orderRoute');
+const cartRoute = require('./routes/cartRoute');
 
 
 dotenv.config()
@@ -35,6 +36,7 @@ app.use('/public/uploads', express.static(path.join(__dirname, 'public/uploads')
 app.use('/user', userRoute)
 app.use('/car', productRoute)
 app.use('/order', OrderRoute)
+app.use('/shop', cartRoute)
 
 app.use('/', imageRoute)
 

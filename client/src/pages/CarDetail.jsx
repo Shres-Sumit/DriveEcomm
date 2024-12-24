@@ -3,14 +3,17 @@ import Layout from '../components/Layout'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import TestDriveBookingModal from '../components/TestDriveBookingModal'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../feature/cart/cartSlice'
+import toast, { Toaster } from 'react-hot-toast'
 
 const CarDetail = () => {
     const { slug } = useParams()
     const [carDetails, setCarDetails] = useState(null)
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddingToCart, setIsAddingToCart] = useState(false)
     const dispatch = useDispatch()
+    console.log(carDetails)
 
     async function getCarDetail() {
         try {
@@ -26,8 +29,37 @@ const CarDetail = () => {
         console.log('Test drive booked for:', date);
     };
 
-    function handleAddToCart() {
-        dispatch(addToCart({ carDetails }))
+    const cartItems = useSelector(state => state.cart.items)
+    const isInCart = cartItems && cartItems.some(item => item._id === carDetails._id)
+
+
+    async function handleAddToCart() {
+        if (isInCart) {
+            toast.error("This car is already in your cart")
+            return
+        }
+        setIsAddingToCart(true)
+        try {
+            const { data } = await axios.post('/shop/create-cart', { productIds: [carDetails._id] })
+            if (data.duplicateProducts?.length > 0) {
+                toast.error('This car is already in your cart')
+            }
+            else {
+                dispatch(addToCart({ carDetails }))
+                toast.success('Added to cart successfully')
+            }
+
+
+        } catch (error) {
+            if (error.response?.status === 400) {
+                toast.error('Please login to add items to cart')
+            } else {
+                toast.error('Error adding to cart. Please try again.')
+            }
+            console.error('Add to cart error:', error)
+        } finally {
+            setIsAddingToCart(false)
+        }
     }
     useEffect(() => {
         getCarDetail()
@@ -35,6 +67,7 @@ const CarDetail = () => {
     return (
         <>
             <Layout>
+                <Toaster />
                 {carDetails ? (
                     <div className="grid md:grid-cols-2 gap-8 ">
                         {/* Image Section */}
@@ -83,7 +116,7 @@ const CarDetail = () => {
 
                             {/* Action Buttons */}
                             <div className="flex space-x-4">
-                                <button className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition" onClick={handleAddToCart}>
+                                <button className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition" onClick={handleAddToCart} disabled={isAddingToCart || isInCart}>
                                     Add to Cart
                                 </button>
                                 <button className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition" onClick={() => setIsModalOpen(true)}>

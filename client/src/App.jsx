@@ -44,7 +44,7 @@ function App() {
 
 
 
-        <Route path='/shop' element={
+        <Route path='/bucket' element={
           isAuthenticated ? (
             <Cart />
           ) : (
