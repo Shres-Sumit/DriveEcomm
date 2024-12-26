@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BsCart2 } from 'react-icons/bs'
+import { FaCartShopping } from "react-icons/fa6";
 import { CiLogin } from 'react-icons/ci'
 import { FaSearch } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
@@ -10,11 +10,15 @@ import { FaUserCircle } from "react-icons/fa";
 
 import { useAuth, useSearch } from '../Context/Auth'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 
 
 
 const Header = () => {
+    const noCart = useSelector(state => state.cart?.items?.productId || [])
+    console.log(noCart)
+
     const navigate = useNavigate()
     const [auth, setAuth] = useAuth()
     const [search, setSearch] = useState('')
@@ -66,14 +70,21 @@ const Header = () => {
 
 
                             </div>
-                            <div className="flex ">
-                                <Link to="/bucket" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">
-                                    <BsCart2 className="text-2xl mb-1 " />
-                                    <span className="text-xl "> Carts</span>
+                            <div className="flex relative">
+                                <Link
+                                    to="/bucket"
+                                    className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold"
+                                >
+                                    <FaCartShopping className="text-2xl mb-1 relative" />
+                                    {
+                                        noCart.length > 0 ?
+                                            <span className="absolute top-0 right-0 text-xs bg-red-500 text-white rounded-full px-1">{noCart.length} </span> : null
+                                    }
+
+                                    <span className="text-xl">Carts</span>
                                 </Link>
-
-
                             </div>
+
                             {
                                 auth.token ? <div>
                                     <Link to="/login" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">

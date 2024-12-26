@@ -13,12 +13,10 @@ const CarDetail = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddingToCart, setIsAddingToCart] = useState(false)
     const dispatch = useDispatch()
-    console.log(carDetails)
 
     async function getCarDetail() {
         try {
             const { data } = await axios.get(`/car/${slug}`)
-            console.log(data)
             setCarDetails(data.car)
         } catch (error) {
             console.log(error)
@@ -34,15 +32,16 @@ const CarDetail = () => {
 
 
     async function handleAddToCart() {
+        console.log(isInCart)
         if (isInCart) {
-            toast.error("This car is already in your cart")
+            toast.error("1 This car is already in your cart")
             return
         }
         setIsAddingToCart(true)
         try {
             const { data } = await axios.post('/shop/create-cart', { productIds: [carDetails._id] })
             if (data.duplicateProducts?.length > 0) {
-                toast.error('This car is already in your cart')
+                toast.error('2 This car is already in your cart')
             }
             else {
                 dispatch(addToCart({ carDetails }))

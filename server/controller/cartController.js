@@ -79,4 +79,18 @@ const getCartProducts = async (req, res) => {
     }
 }
 
-module.exports = { createCart, getCartProducts }
+const deleteCartProduct = async (req, res) => {
+
+    try {
+        await productCard.findByIdAndUpdate(req.body.cartId,
+            { $pull: { productId: req.params.pid } },
+            { new: true })
+        res.status(200).json({ success: true, message: 'car deleted' })
+    }
+    catch (error) {
+        res.status(500).json({ message: 'internal error in cart controller', error })
+    }
+
+}
+
+module.exports = { createCart, getCartProducts, deleteCartProduct }
