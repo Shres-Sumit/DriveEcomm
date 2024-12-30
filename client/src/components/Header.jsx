@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaCartShopping } from "react-icons/fa6";
 import { CiLogin } from 'react-icons/ci'
 import { FaSearch } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaCar } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
+import { IoLogInOutline } from "react-icons/io5";
+
 
 
 
@@ -17,12 +19,16 @@ import { useSelector } from 'react-redux'
 
 const Header = () => {
     const noCart = useSelector(state => state.cart?.items?.productId || [])
-    console.log(noCart)
 
     const navigate = useNavigate()
     const [auth, setAuth] = useAuth()
-    const [search, setSearch] = useState('')
     const [searchResults, setSearchResults] = useSearch()
+
+    const [search, setSearch] = useState('')
+    const [isDropdownOpen, setDropdownOpen] = useState(false)
+    const dropdownRef = useRef(null)
+
+
 
     const handleSearch = async (e) => {
         try {
@@ -37,6 +43,32 @@ const Header = () => {
         }
     }
 
+    function handleUserClick() {
+        setDropdownOpen(!isDropdownOpen)
+    }
+
+    function handleLogOut() {
+        setDropdownOpen(false)
+        localStorage.clear()
+        navigate('/login')
+
+    }
+
+    useEffect(() => {
+        const handleClickedOutside = e => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setDropdownOpen(false)
+            }
+        };
+        document.addEventListener('mousedown', handleClickedOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickedOutside)
+        }
+
+    }, [])
+
+
+
     return (
         <>
             <nav className="shadow-xl max-w-[99%] mx-auto bg-gray-300  rounded-sm mb-[20px]">
@@ -44,7 +76,10 @@ const Header = () => {
                     <div className="relative flex h-16 items-center justify-between">
                         <div className="flex flex-1 items-center justify-start w-14">
                             <div className="flex shrink-0 items-center">
-                                <img className="h-8 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" />
+                                <Link to={'/'}>
+                                    <img className="h-8 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" />
+
+                                </Link>
                             </div>
                         </div>
 
@@ -62,42 +97,67 @@ const Header = () => {
                         </div>
 
                         <div className="flex items-center justify-center ml-8 w-[30%] gap-20">
-                            <div className="flex ">
-                                <Link to="#" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">
-                                    <FaCar className="text-2xl mb-1  " />
-                                    <span className="text-xl"> Choose</span>
+                            <div className="group relative">
+                                <Link to="#" className="text-gray-700 hover:text-gray-900">
+                                    <FaCar className="text-3xl" />
                                 </Link>
-
-
+                                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-gray-200 text-gray-700  px-2 py-1 rounded-md z-10 transition-opacity transition-delay-200 duration-300 text-base">
+                                    Choose
+                                </div>
                             </div>
-                            <div className="flex relative">
+                            <div className="group relative">
                                 <Link
                                     to="/bucket"
                                     className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold"
                                 >
-                                    <FaCartShopping className="text-2xl mb-1 relative" />
+                                    <FaCartShopping className="text-3xl  relative" />
                                     {
-                                        noCart.length > 0 ?
-                                            <span className="absolute top-0 right-0 text-xs bg-red-500 text-white rounded-full px-1">{noCart.length} </span> : null
+                                        noCart.length > 0 && (
+                                            <span className="absolute top-0 right-0 text-xs bg-red-500 text-white rounded-full px-1">{noCart.length} </span>)
                                     }
 
-                                    <span className="text-xl">Carts</span>
                                 </Link>
+                                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-gray-200 text-gray-700 text-base px-2 py-1 rounded-md z-20 transition-opacity transition-delay-200 duration-300 ">
+                                    Cart
+                                </div>
                             </div>
 
                             {
-                                auth.token ? <div>
-                                    <Link to="/login" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">
-                                        <FaUserCircle className="text-2xl mb-1" />
+                                auth.token ? <div className='group relative'>
+                                    <button onClick={handleUserClick} className="text-gray-700 hover:text-gray-900 focus:outline-none">
+                                        <FaUserCircle className="text-3xl " />
 
-                                        <span className="text-xl">{auth?.user?.userName} </span>
-                                    </Link>
+                                    </button>
+                                    {
+                                        !isDropdownOpen && (
+                                            <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-gray-200 text-gray-700 text-base px-2 py-1 rounded-md z-10 transition-opacity transition-delay-200 duration-300">
+                                                Account
+                                            </div>
+                                        )
+                                    }
+
+                                    {isDropdownOpen && (
+                                        <div ref={dropdownRef} className="absolute -right-10 mt-3 w-52 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                                            <Link to={'/profile'} className="flex items-center  px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                                <span className="mr-2" >Profile</span>
+                                                <FaUserCircle className='text-2xl' />
+                                            </Link>
+                                            <button onClick={handleLogOut} className="flex w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                                <span className="mr-2" >Log Out</span>
+                                                <IoLogInOutline className='text-2xl' />
+
+                                            </button>
+                                        </div>
+                                    )}
+
                                 </div> :
-                                    <div>
-                                        <Link to="/login" className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold">
-                                            <CiLogin className="text-2xl mb-1" />
-                                            <span className="text-xl">Sign in</span>
+                                    <div className="group relative">
+                                        <Link to="/login" className="text-gray-700 hover:text-gray-900">
+                                            <CiLogin className="text-2xl" />
                                         </Link>
+                                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block bg-gray-700 text-white text-sm px-2 py-1 rounded-md">
+                                            Sign In
+                                        </div>
                                     </div>
                             }
 

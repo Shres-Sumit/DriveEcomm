@@ -27,6 +27,7 @@ const Cart = () => {
         try {
             await axios.delete(`/shop/deleteCart/${carId}`);
             dispatch(removeFromCart({ carId }));
+
         } catch (error) {
             console.error(error);
         }
