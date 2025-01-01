@@ -113,7 +113,6 @@ const Cart = () => {
                                 </Link>
                                 <button
                                     className="bg-blue-600 text-white px-8 py-2 rounded-lg hover:bg-blue-700 transition"
-                                    onClick={() => {/* Add checkout logic */ }}
                                 >
                                     Checkout
                                 </button>

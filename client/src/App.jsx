@@ -15,6 +15,7 @@ import CarDetail from './pages/CarDetail'
 import ScrollToTop from './Context/ScrollToTop'
 import SearchCom from './pages/SearchCom'
 import Cart from './pages/User/Cart'
+import UserInfo from './pages/User/UserInfo'
 
 
 function App() {
@@ -56,6 +57,8 @@ function App() {
         <Route path='/c' element={<CarList />} />
         <Route path='/c/:slug' element={<CarDetail />} />
         <Route path='/search/:search' element={<SearchCom />} />
+
+        <Route path='/profile' element={<UserInfo />} />
 
 
         <Route path='/signup' element={<SignUp />} />

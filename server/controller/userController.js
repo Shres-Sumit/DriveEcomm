@@ -128,4 +128,16 @@ const getAllUser = async (req, res) => {
     }
 }
 
-module.exports = { userSignIn, userLogin, getAllUser }
+const updateUser = async (req, res) => {
+    try {
+        const updateData = req.body
+
+        const updatedUser = await userInfo.findByIdAndUpdate(req.params.id, updateData, { new: true })
+        res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ success: false, message: 'Internal server error', error: error.message })
+    }
+}
+
+module.exports = { userSignIn, userLogin, getAllUser, updateUser }
