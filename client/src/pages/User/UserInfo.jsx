@@ -5,7 +5,6 @@ import axios from 'axios';
 
 const UserInfo = () => {
     const [auth, setAuth] = useAuth();
-    console.log(auth)
     const { user } = auth;
 
     const [isEditingProfile, setIsEditingProfile] = useState(false);

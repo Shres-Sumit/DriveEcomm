@@ -153,11 +153,11 @@ const Header = () => {
                                 </div> :
                                     <div className="group relative">
                                         <Link to="/login" className="text-gray-700 hover:text-gray-900">
-                                            <CiLogin className="text-2xl" />
+                                            <CiLogin className="text-3xl" />
                                         </Link>
-                                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block bg-gray-700 text-white text-sm px-2 py-1 rounded-md">
+                                        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-gray-200 text-gray-700 text-base px-2 py-1 rounded-md z-20 transition-opacity transition-delay-200 duration-300 w-20">
                                             Sign In
-                                        </div>
+                                        </span>
                                     </div>
                             }
 

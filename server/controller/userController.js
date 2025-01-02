@@ -1,7 +1,9 @@
 const bcrypt = require('bcryptjs')
+
 const jwt = require('jsonwebtoken')
 
 const { userInfo } = require("../models/userModel");
+const transporter = require('../helper/sendMail');
 
 const userSignIn = async (req, res) => {
     try {
@@ -50,6 +52,7 @@ const userSignIn = async (req, res) => {
         })
 
 
+
         const savedUser = await newUser.save();
 
         if (!savedUser) {
@@ -58,6 +61,27 @@ const userSignIn = async (req, res) => {
                 message: 'Failed to create user'
             });
         }
+
+        const token = jwt.sign(
+            { id: savedUser._id, email: savedUser.email },
+            process.env.Secret,
+            { expiresIn: '1h' }
+        )
+
+        const verificationLink = `http://localhost:${process.env.PORT}/verify-email?token=${token}`
+        const mailOption = {
+            from: process.env.MAILTRAP_USER,
+            to: savedUser.email,
+            subject: 'Email Verification',
+            html: `
+                <p>Hi ${savedUser.firstName},</p>
+                <p>Thank you for signing up. Please verify your email by clicking the link below:</p>
+                <a href="${verificationLink}">Verify Email</a>
+                <p>This link will expire in 24 hours.</p>
+            `,
+        }
+
+        await transporter.sendMail(mailOption)
 
         const userResponse = savedUser.toObject();
         console.log(userResponse)
@@ -93,6 +117,13 @@ const userLogin = async (req, res) => {
         const user = await userInfo.findOne({ email })
         if (!user) {
             return res.status(400).send({ message: "user not found" })
+        }
+
+        if (!user.verified) {
+            return res.status(403).json({
+                success: false,
+                message: 'Email not verified. Please verify your email before logging in.',
+            });
         }
 
         if (user && bcrypt.compareSync(password, user.hashPassword)) {
