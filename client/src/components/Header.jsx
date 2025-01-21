@@ -12,16 +12,14 @@ import { IoLogInOutline } from "react-icons/io5";
 
 import { useAuth, useSearch } from '../Context/Auth'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
 
 
 
 
 const Header = () => {
-    const noCart = useSelector(state => state.cart?.items?.productId || [])
 
     const navigate = useNavigate()
-    const [auth, setAuth] = useAuth()
+    const [auth] = useAuth()
     const [searchResults, setSearchResults] = useSearch()
 
     const [search, setSearch] = useState('')
@@ -111,14 +109,10 @@ const Header = () => {
                                     className="flex flex-col items-center text-gray-700 hover:text-gray-900 font-semibold"
                                 >
                                     <FaCartShopping className="text-3xl  relative" />
-                                    {
-                                        noCart.length > 0 && (
-                                            <span className="absolute top-0 right-0 text-xs bg-red-500 text-white rounded-full px-1">{noCart.length} </span>)
-                                    }
 
                                 </Link>
                                 <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-gray-200 text-gray-700 text-base px-2 py-1 rounded-md z-20 transition-opacity transition-delay-200 duration-300 ">
-                                    Cart
+                                    Bucket
                                 </div>
                             </div>
 

@@ -68,7 +68,7 @@ const createCart = async (req, res) => {
 
 const getCartProducts = async (req, res) => {
     try {
-        const cartProducts = await productCard.find({ userId: req.userId }).populate('productId')
+        const cartProducts = await productCard.findOne({ userId: req.userId }).populate('productId')
         if (!cartProducts || cartProducts.length === 0) {
             return res.status(400).json({ success: false, message: "dont have any product in cart" })
         }
@@ -82,13 +82,28 @@ const getCartProducts = async (req, res) => {
 const deleteCartProduct = async (req, res) => {
 
     try {
-        await productCard.findByIdAndUpdate(req.body.cartId,
-            { $pull: { productId: req.params.pid } },
-            { new: true })
-        res.status(200).json({ success: true, message: 'car deleted' })
-    }
-    catch (error) {
-        res.status(500).json({ message: 'internal error in cart controller', error })
+        const { cartId } = req.body;
+        const productId = req.params.pid;
+
+        if (!cartId || !productId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Cart ID and Product ID are required'
+            });
+        }
+        const updatedCart = await productCard.findByIdAndUpdate(
+            cartId,
+            { $pull: { productId: productId } },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedCart) {
+            return res.status(404).json({ success: false, message: 'Cart not found' });
+        }
+
+        res.status(200).json({ success: true, message: 'Product removed from cart', updatedCart });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal error in cart controller', error });
     }
 
 }

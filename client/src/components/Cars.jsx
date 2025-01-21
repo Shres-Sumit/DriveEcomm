@@ -1,25 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { useSearch } from '../Context/Auth'
+import { useCarsList, useSearch } from '../Context/Auth'
 
 const Cars = () => {
 
-    const [carsList, setCarsList] = useState([])
+    const [carsList, setCarsList] = useCarsList()
 
-    const getAllCars = async () => {
-        try {
-            const { data } = await axios.get('/car/getAllcars')
-            console.log(data)
-            setCarsList(data.productList)
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
-    useEffect(() => {
-        getAllCars()
-    }, [])
     return (
         <div className='mt-[50px]'>
             <h1 className='text-3xl font-semibold'>Antique Collection</h1>

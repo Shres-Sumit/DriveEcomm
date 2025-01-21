@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const authContext = createContext()
 const SearchContext = createContext();
+const CarContext = createContext()
 
 const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({
@@ -44,10 +45,35 @@ const SearchProvider = ({ children }) => {
     );
 };
 
-const useAuth = () => useContext(authContext)
+const CarProviders = ({ children }) => {
+    const [carsList, setCarsList] = useState([])
+    const getAllCars = async () => {
+        try {
+            const { data } = await axios.get('/car/getAllcars')
+            // console.log(data)
+            setCarsList(data.productList)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getAllCars()
+    }, [])
+
+    return (
+        <CarContext.Provider value={[carsList, setCarsList]}>
+            {children}
+        </CarContext.Provider>
+    )
+}
+
+const useAuth = () => { return useContext(authContext) }
 
 const useSearch = () => useContext(SearchContext)
 
+const useCarsList = () => useContext(CarContext)
 
 
-export { useAuth, AuthProvider, SearchProvider, useSearch }
+
+export { useAuth, AuthProvider, SearchProvider, useSearch, useCarsList, CarProviders }

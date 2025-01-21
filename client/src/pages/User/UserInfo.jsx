@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import Layout from '../../components/Layout';
-import { useAuth } from '../../Context/Auth';
+import { useAuth, useCarsList } from '../../Context/Auth';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const UserInfo = () => {
     const [auth, setAuth] = useAuth();
+    const [carsList, setCarsList] = useCarsList()
+
+
     const { user } = auth;
+
+    console.log(carsList)
+
+
 
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const [isEditingAddress, setIsEditingAddress] = useState(false);
@@ -47,7 +55,6 @@ const UserInfo = () => {
         } catch (error) {
             console.error('Error updating user:', error);
 
-            // Optional: Show error notification to the user
             alert('Failed to update user. Please try again.');
         }
     }
@@ -73,7 +80,7 @@ const UserInfo = () => {
 
     return (
         <Layout>
-            <div className="min-h-screen bg-gray-100 p-8">
+            <div className="h-screen bg-gray-100 p-8 rounded-md">
                 <h1 className="text-2xl font-bold text-gray-800 mb-6">Manage My Account</h1>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="bg-white rounded-lg shadow-md p-6">
@@ -194,7 +201,46 @@ const UserInfo = () => {
                         )}
                     </div>
                 </div>
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-800 my-6">Purchase Cars</h1>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4  w-[80%]">
+                        {carsList.map(car => (
+                            <Link
+                                key={car._id}
+                                className="border rounded-lg p-4 shadow-md cursor-pointer transform transition-all hover:scale-105 hover:bg-gray-100"
+                                to={`/c/${car.slug}`}
+                            >
+                                <div className="mb-2">
+                                    <img
+                                        src={car.image}
+                                        alt={`${car.title} ${car.model}`}
+                                        className="w-full h-48 object-cover rounded-md"
+                                        onError={(e) => {
+                                            e.target.src = '/api/placeholder/300/200';
+                                            e.target.alt = 'Car image not available';
+                                        }}
+                                    />
+                                </div>
+                                <div className="text-center">
+                                    <h3 className="font-bold text-lg">{car.title} </h3>
+                                    <p className="font-semibold text-xl text-blue-600">${car.price}</p>
+                                </div>
+                            </Link>
+
+                        ))}
+                    </div>
+                </div>
+                <div className='my-6 font-semibold text-xl leading-10'>
+                    <Link
+                        to="/bucket"
+                        className="inline-block bg-blue-600 text-white px-6 py-2   rounded-lg hover:bg-blue-700 transition"
+                    >
+                        Go to my Bucket
+                    </Link>
+                </div>
             </div>
+
+
         </Layout>
     );
 };

@@ -7,7 +7,7 @@ const cartRoute = express.Router()
 
 cartRoute.post('/create-cart', requireSign, createCart)
 cartRoute.get('/getCart', requireSign, getCartProducts)
-cartRoute.delete('/deleteCart/:pid', requireSign, deleteCartProduct)
+cartRoute.patch('/deleteCart/:pid', requireSign, deleteCartProduct)
 
 
 module.exports = cartRoute

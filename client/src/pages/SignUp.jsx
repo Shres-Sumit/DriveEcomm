@@ -48,7 +48,7 @@ const SignUp = () => {
     return (
         <>
             <Toaster />
-            <div className="min-h-screen flex items-center justify-center bg-gray-200  ">
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-green-500 to-green-500 ">
                 <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
                     <form className="grid gap-6" onSubmit={handleSubmit}>
                         <h2 className="text-4xl font-bold text-center text-gray-900 mb-4 uppercase">Sign Up</h2>
