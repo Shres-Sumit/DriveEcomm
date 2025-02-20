@@ -73,7 +73,7 @@ const Cart = () => {
 
                                 <div className="flex-grow">
                                     <Link
-                                        to={`/car/${car.slug}`}
+                                        to={`/c/${car.slug}`}
                                         className="text-xl font-semibold text-gray-900 hover:text-blue-600"
                                     >
                                         {car.title}

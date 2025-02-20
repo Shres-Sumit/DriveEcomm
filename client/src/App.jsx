@@ -16,11 +16,37 @@ import ScrollToTop from './Context/ScrollToTop'
 import SearchCom from './pages/SearchCom'
 import Cart from './pages/User/Cart'
 import UserInfo from './pages/User/UserInfo'
+import { useEffect, useState } from 'react'
 
 
 function App() {
   const [auth, setAuth] = useAuth()
+  const [loading, setLoading] = useState(true)
   const isAuthenticated = auth?.user !== null;
+
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 100))
+        setLoading(false)
+      } catch (error) {
+        console.error('Error during initialization:', error);
+        setLoading(false);
+      }
+    }
+    initializeApp()
+
+  }, [])
+
+  if (loading) {
+    // Render the spinner during the loading phase
+    return (
+      <div className="loading-spinner">
+        <div className="spinner"></div>
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <>
