@@ -2,18 +2,20 @@ import React from 'react'
 import Layout from '../../components/Layout'
 import Coursel from '../../components/Coursel'
 import Cars from '../../components/Cars'
-import CreateProduct from './CarModify'
 import CarModify from './CarModify'
+import AdminLayout from './AdminLayout'
 
 const AdminHome = () => {
     return (
         <>
             <Layout>
+                <AdminLayout>
 
-                <CarModify />
-                <Coursel />
 
-                <Cars />
+                    <Coursel />
+
+                    <Cars />
+                </AdminLayout>
             </Layout>
         </>
     )

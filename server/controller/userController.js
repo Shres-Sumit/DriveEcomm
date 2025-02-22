@@ -151,7 +151,7 @@ const getAllUser = async (req, res) => {
         if (!users || !users.length === 0) {
             return res.status(400).json({ success: false, message: 'no users' })
         }
-        res.status(200).json({ success: true, users })
+        res.status(200).json({ success: true, users: users })
 
     } catch (error) {
         console.log(error)

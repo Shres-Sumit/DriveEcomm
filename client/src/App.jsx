@@ -17,6 +17,9 @@ import SearchCom from './pages/SearchCom'
 import Cart from './pages/User/Cart'
 import UserInfo from './pages/User/UserInfo'
 import { useEffect, useState } from 'react'
+import DashBoardHome from './pages/Admin/Dashboard/DashBoardHome'
+import EditCar from './pages/Admin/component/EditCar'
+import EditUser from './pages/Admin/component/EditUser'
 
 
 function App() {
@@ -52,21 +55,17 @@ function App() {
     <>
       <ScrollToTop />
       <Routes>
-        <Route path='/' element={
-          isAuthenticated ? (
-            auth.user.role === 1 ? (
-              <AdminHome />
-            ) : (
-              <UserHome />
-            )
-          ) : (
-            <Home />
+        <Route path="/" element={isAuthenticated ? (auth.user.role === 1 ? <DashBoardHome /> : <UserHome />) : <Home />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/login' element={<Login />} />
 
-          )
-
-        } />
         <Route path="/admin" element={<AdminRoute />}>
+          <Route index element={<DashBoardHome />} />
           <Route path='create-product' element={<CreateProduct />} />
+          <Route path='cars' element={<EditCar />} />
+          <Route path='users' element={<EditUser />} />
+
+
         </Route>
 
 
@@ -87,8 +86,7 @@ function App() {
         <Route path='/profile' element={<UserInfo />} />
 
 
-        <Route path='/signup' element={<SignUp />} />
-        <Route path='/login' element={<Login />} />
+
 
       </Routes>
 
