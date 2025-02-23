@@ -19,9 +19,6 @@ const CarDetail = () => {
         }
     }
 
-    const handleBookDrive = (date) => {
-        console.log('Test drive booked for:', date);
-    };
 
 
 
@@ -113,7 +110,8 @@ const CarDetail = () => {
                                 <TestDriveBookingModal
                                     open={isModalOpen}
                                     onClose={() => setIsModalOpen(false)}
-                                    onBook={handleBookDrive}
+
+                                    carId={carDetails._id}
 
                                 />
                             </div>

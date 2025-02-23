@@ -18,8 +18,8 @@ import Cart from './pages/User/Cart'
 import UserInfo from './pages/User/UserInfo'
 import { useEffect, useState } from 'react'
 import DashBoardHome from './pages/Admin/Dashboard/DashBoardHome'
-import EditCar from './pages/Admin/component/EditCar'
 import EditUser from './pages/Admin/component/EditUser'
+import AdminCarComponet from './pages/Admin/component/AdminCarComponet'
 
 
 function App() {
@@ -62,7 +62,7 @@ function App() {
         <Route path="/admin" element={<AdminRoute />}>
           <Route index element={<DashBoardHome />} />
           <Route path='create-product' element={<CreateProduct />} />
-          <Route path='cars' element={<EditCar />} />
+          <Route path='cars' element={<AdminCarComponet />} />
           <Route path='users' element={<EditUser />} />
 
 
@@ -82,7 +82,6 @@ function App() {
         <Route path='/c' element={<CarList />} />
         <Route path='/c/:slug' element={<CarDetail />} />
         <Route path='/search/:search' element={<SearchCom />} />
-
         <Route path='/profile' element={<UserInfo />} />
 
 

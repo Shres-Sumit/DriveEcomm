@@ -7,7 +7,6 @@ const AdminLayout = ({ children }) => {
         <div className='admin-container flex'>
             <Sidebar />
             <div className="admin-container flex-1">
-
                 <main className="p-4">{children}</main>
             </div>
 
