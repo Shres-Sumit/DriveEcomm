@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react'
 import DashBoardHome from './pages/Admin/Dashboard/DashBoardHome'
 import EditUser from './pages/Admin/component/EditUser'
 import AdminCarComponet from './pages/Admin/component/AdminCarComponet'
+import Choice from './pages/Choice'
 
 
 function App() {
@@ -64,8 +65,6 @@ function App() {
           <Route path='create-product' element={<CreateProduct />} />
           <Route path='cars' element={<AdminCarComponet />} />
           <Route path='users' element={<EditUser />} />
-
-
         </Route>
 
 
@@ -83,6 +82,7 @@ function App() {
         <Route path='/c/:slug' element={<CarDetail />} />
         <Route path='/search/:search' element={<SearchCom />} />
         <Route path='/profile' element={<UserInfo />} />
+
 
 
 

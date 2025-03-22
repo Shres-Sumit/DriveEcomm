@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FaCartShopping } from "react-icons/fa6";
-import { CiLogin } from 'react-icons/ci'
+import { IoIosLogIn } from "react-icons/io";
 import { FaSearch } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaCar } from "react-icons/fa";
@@ -25,9 +25,6 @@ const Header = () => {
     const [search, setSearch] = useState('')
     const [isDropdownOpen, setDropdownOpen] = useState(false)
     const dropdownRef = useRef(null)
-
-
-
 
 
 
@@ -99,14 +96,7 @@ const Header = () => {
                         </div>
 
                         <div className="flex items-center justify-center ml-8 w-[30%] gap-20">
-                            <div className="group relative">
-                                <Link to="#" className="text-gray-700 hover:text-gray-900">
-                                    <FaCar className="text-3xl" />
-                                </Link>
-                                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-gray-200 text-gray-700  px-2 py-1 rounded-md z-10 transition-opacity transition-delay-200 duration-300 text-base">
-                                    Choose
-                                </div>
-                            </div>
+
                             <div className="group relative">
                                 <Link
 
@@ -130,7 +120,7 @@ const Header = () => {
                                     {
                                         !isDropdownOpen && (
                                             <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-gray-200 text-gray-700 text-base px-2 py-1 rounded-md z-10 transition-opacity transition-delay-200 duration-300">
-                                                Account
+                                                {auth?.user?.userName}
                                             </div>
                                         )
                                     }
@@ -152,7 +142,7 @@ const Header = () => {
                                 </div> :
                                     <div className="group relative">
                                         <Link to="/login" className="text-gray-700 hover:text-gray-900">
-                                            <CiLogin className="text-3xl" />
+                                            <IoIosLogIn className="text-3xl font-bold" />
                                         </Link>
                                         <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible bg-gray-200 text-gray-700 text-base px-2 py-1 rounded-md z-20 transition-opacity transition-delay-200 duration-300 w-20">
                                             Sign In

@@ -11,7 +11,7 @@ const userSignIn = async (req, res) => {
         if (!firstName || !lastName || !email || !phone || !address || !userName || !password || !confirmPassword) {
             return res.status(400).json({
                 success: false,
-                message: 'All fields are required',
+                message: 'All fields are need to be fullfilled',
             });
         }
         const existingUser = await userInfo.findOne({ email });

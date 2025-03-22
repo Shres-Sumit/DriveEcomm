@@ -57,7 +57,7 @@ const AdminCarComponet = () => {
                                     className="bg-blue-500 text-white px-4 py-2 rounded-sm hover:bg-blue-600 transition-colors duration-200 ease-in-out"
 
                                 >
-                                    <span className='text-2xl leading-tight'>
+                                    <span className='text-2xl '>
 
                                         <RiEdit2Fill />
                                     </span>

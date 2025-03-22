@@ -26,6 +26,13 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (datas.password !== datas.confirmPassword) {
+            setError("Passwords do not match");
+            toast.error("Passwords do not match", {
+                duration: 5000
+            });
+            return;
+        }
         try {
             const { data } = await axios.post(`/user/signup`, datas);
             if (data.success) {
@@ -35,13 +42,19 @@ const SignUp = () => {
                 });
             }
         } catch (error) {
+            let errorMessage = 'An error occurred';
             if (error.response) {
-                setError(error.response.data.message || 'An error occurred');
+                errorMessage = error.response.data.message || errorMessage;
             } else if (error.request) {
-                setError('No response from server');
+                errorMessage = 'No response from server';
             } else {
-                setError('Error in request setup');
+                errorMessage = 'Error in request setup';
             }
+
+            setError(errorMessage)
+            toast.error(errorMessage, {
+                duration: 5000
+            })
         }
     };
 
@@ -52,12 +65,6 @@ const SignUp = () => {
                 <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
                     <form className="grid gap-6" onSubmit={handleSubmit}>
                         <h2 className="text-4xl font-bold text-center text-gray-900 mb-4 uppercase">Sign Up</h2>
-                        {error && (
-                            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-sm">
-                                {error}
-                            </div>
-                        )}
-
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
