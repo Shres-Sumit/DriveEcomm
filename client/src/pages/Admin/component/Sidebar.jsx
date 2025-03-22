@@ -8,13 +8,13 @@ const Sidebar = () => {
             <nav className="mt-4">
                 <ul>
                     <li className="">
-                        <NavLink to="/admin" end className={({ isActive }) => `block p-2 rounded cursor-pointer ${isActive ? "bg-gray-600" : "hover-bg-gray-700"} `}>Dashboard</NavLink>
+                        <NavLink to="/admin" end className={({ isActive }) => `block p-2 rounded cursor-pointer ${isActive ? "bg-gray-600" : "hover:bg-gray-700"} `}>Dashboard</NavLink>
                     </li>
                     <li >
-                        <NavLink to="/admin/cars" className={({ isActive }) => `block p-2 rounded cursor-pointer ${isActive ? "bg-gray-600" : "hover-bg-gray-700"} `}>Manage Cars</NavLink>
+                        <NavLink to="/admin/cars" className={({ isActive }) => `block p-2 rounded cursor-pointer ${isActive ? "bg-gray-600" : "hover:bg-gray-700"} `}>Manage Cars</NavLink>
                     </li>
                     <li >
-                        <NavLink to="/admin/users" className={({ isActive }) => `block p-2 rounded cursor-pointer ${isActive ? "bg-gray-600" : "hover-bg-gray-700"} `}>User Management</NavLink>
+                        <NavLink to="/admin/users" className={({ isActive }) => `block p-2 rounded cursor-pointer ${isActive ? "bg-gray-600" : "hover:bg-gray-700"} `}>User Management</NavLink>
                     </li>
                 </ul>
             </nav>
