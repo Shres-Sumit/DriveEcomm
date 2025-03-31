@@ -30,7 +30,8 @@ const createProduct = async (req, res) => {
             image: `${basePath}${filename}`,
             fuelType,
             transmission,
-            vehicleType
+            vehicleType,
+            mileage
         })
         car = await car.save()
         if (!car)

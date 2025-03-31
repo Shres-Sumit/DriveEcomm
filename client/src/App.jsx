@@ -20,6 +20,8 @@ import { useEffect, useState } from 'react'
 import DashBoardHome from './pages/Admin/Dashboard/DashBoardHome'
 import EditUser from './pages/Admin/component/EditUser'
 import AdminCarComponet from './pages/Admin/component/AdminCarComponet'
+import CarModify from './pages/Admin/CarModify'
+import ForgetPassword from './pages/User/ForgetPassword'
 
 
 function App() {
@@ -58,12 +60,14 @@ function App() {
         <Route path="/" element={isAuthenticated ? (auth.user.role === 1 ? <DashBoardHome /> : <UserHome />) : <Home />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/forgot-password' element={<ForgetPassword />} />
 
         <Route path="/admin" element={<AdminRoute />}>
           <Route index element={<DashBoardHome />} />
           <Route path='create-product' element={<CreateProduct />} />
           <Route path='cars' element={<AdminCarComponet />} />
           <Route path='users' element={<EditUser />} />
+          <Route path='edit-car/:slug' element={<CarModify />} />
         </Route>
 
 

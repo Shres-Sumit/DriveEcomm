@@ -6,15 +6,14 @@ import axios from 'axios'
 import { RiEdit2Fill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 
-
-
-const AdminCarComponet = () => {
+const AdminCarComponent = () => {
     const [cars, setCars] = useState([])
+    const navigate = useNavigate()
+
     useEffect(() => {
         async function fetchCar() {
             try {
                 const { data } = await axios.get('/car/getAllcars')
-                // console.log(data.productList)
                 setCars(data.productList)
             } catch (error) {
                 console.log(error)
@@ -22,6 +21,23 @@ const AdminCarComponet = () => {
         }
         fetchCar()
     }, [])
+
+    const handleEdit = (slug) => {
+        navigate(`/admin/edit-car/${slug}`)
+    }
+
+    const handleDelete = async (id) => {
+        // if (window.confirm('Are you sure you want to delete this car?')) {
+        //     try {
+        //         await axios.delete(`/car/delete/${id}`)
+        //         // Refresh the list after deletion
+        //         setCars(cars.filter(car => car._id !== id))
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
+        // }
+    }
+
     return (
         <Layout>
             <AdminLayout>
@@ -55,30 +71,25 @@ const AdminCarComponet = () => {
                             <div className="flex justify-between mt-4">
                                 <button
                                     className="bg-blue-500 text-white px-4 py-2 rounded-sm hover:bg-blue-600 transition-colors duration-200 ease-in-out"
-
+                                    onClick={() => handleEdit(car.slug)}
                                 >
-                                    <span className='text-2xl '>
-
+                                    <span className='text-2xl'>
                                         <RiEdit2Fill />
                                     </span>
-
                                 </button>
                                 <button
                                     className="bg-red-500 text-white px-4 py-2 rounded-sm hover:bg-red-600 transition-colors duration-200 ease-in-out"
-
+                                    onClick={() => handleDelete(car._id)}
                                 >
                                     <MdDelete />
-
                                 </button>
                             </div>
                         </div>
                     ))}
                 </div>
-
             </AdminLayout>
-
         </Layout>
     )
 }
 
-export default AdminCarComponet
+export default AdminCarComponent

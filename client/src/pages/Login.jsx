@@ -92,6 +92,16 @@ const Login = () => {
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                     onChange={handleChange}
                                 />
+                                {/* Forgot Password Button */}
+                                <div className="text-right">
+                                    <button
+                                        type="button"
+                                        onClick={() => navigate('/forgot-password')}
+                                        className="text-blue-600 hover:underline text-sm"
+                                    >
+                                        Forgot Password?
+                                    </button>
+                                </div>
                             </div>
 
                             <button

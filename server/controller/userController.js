@@ -171,4 +171,24 @@ const updateUser = async (req, res) => {
     }
 }
 
-module.exports = { userSignIn, userLogin, getAllUser, updateUser }
+const userResetPassword = async (req, res) => {
+    const { email, password } = req.body
+    const user = await userInfo.findOne({ email })
+    if (!user) return res.json({ success: false, message: "User not found" })
+
+    const hashPassword = bcrypt.hashSync(password, 10)
+    user.password = hashPassword
+    res.json({ success: true, message: "Password reset successful!" });
+}
+
+const emailCheck = async (req, res) => {
+    const { email } = req.body
+    const user = await userInfo.findOne({ email })
+    if (!user) {
+        return res.json({ success: false, message: "Email not found" });
+    }
+
+    res.json({ success: true });
+}
+
+module.exports = { userSignIn, userLogin, getAllUser, updateUser, userResetPassword, emailCheck }
