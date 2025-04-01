@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../AdminLayout";
 import Layout from "../../../components/Layout";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const DashBoardHome = () => {
+    const navigate = useNavigate();
     const [cars, setCars] = useState([]);
     const [userList, setUserList] = useState([]);
     const [testDrives, setTestDrives] = useState([]);
@@ -48,13 +50,13 @@ const DashBoardHome = () => {
         fetchTestDrives();
     }, []);
 
-    // Function to get car details (name & image) by ID
+
     const getCarDetails = (carId) => {
         const car = cars.find((c) => c._id === carId);
         return car ? { name: car.title, image: car.image } : { name: "Unknown Car", image: "" };
     };
 
-    // Function to get user name by ID
+
     const getUserName = (userId) => {
         const user = userList.find((u) => u._id === userId);
         return user ? user.userName : "Unknown User";
@@ -92,12 +94,12 @@ const DashBoardHome = () => {
                     <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-                        <div className="bg-blue-500 p-6 text-white rounded-lg shadow-md flex flex-col items-center">
+                        <div className="bg-blue-500 p-6 text-white rounded-lg shadow-md flex flex-col items-center cursor-pointer hover:bg-blue-600 transition duration-300" onClick={() => navigate("/admin/cars")} >
                             <h2 className="text-lg font-semibold">Total Cars</h2>
                             <p className="text-3xl font-bold">{cars.length}</p>
                         </div>
 
-                        <div className="bg-green-500 p-6 text-white rounded-lg shadow-md flex flex-col items-center">
+                        <div className="bg-green-500 p-6 text-white rounded-lg shadow-md flex flex-col items-center cursor-pointer hover:bg-green-600 transition duration-300" onClick={() => navigate("/admin/users")}>
                             <h2 className="text-lg font-semibold">Active Users</h2>
                             <p className="text-3xl font-bold">{userList.length}</p>
                         </div>

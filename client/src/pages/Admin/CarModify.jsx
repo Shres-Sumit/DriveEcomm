@@ -45,7 +45,7 @@ const CarModify = () => {
         fetchCarDetails();
     }, [slug]);
 
-    // Handle input changes
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCarData({
@@ -54,7 +54,7 @@ const CarModify = () => {
         });
     };
 
-    // Handle form submission
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

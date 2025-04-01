@@ -76,11 +76,13 @@ const Header = () => {
                         <div className="flex flex-1 items-center justify-start w-14">
                             <div className="flex shrink-0 items-center">
                                 <Link to={'/'}>
-                                    <img className="h-8 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" />
-
+                                    <h1 className="text-3xl font-bold text-indigo-600 tracking-wider italic drop-shadow-lg">
+                                        Vintage
+                                    </h1>
                                 </Link>
                             </div>
                         </div>
+
 
                         <div className="flex-1 flex justify-center">
                             <div className="w-full max-w-lg relative">

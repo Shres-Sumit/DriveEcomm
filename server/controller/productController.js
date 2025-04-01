@@ -107,6 +107,26 @@ const getOneCar = async (req, res) => {
     }
 }
 
+const deleteProduct = async (req, res) => {
+    try {
+        const car = await CarProduct.findById(req.params.id)
+        if (!car) return res.status(404).json({ message: "car not found" })
 
+        if (car.image) {
+            const imagePath = path.join(__dirname, '../public/uploads', path.basename(car.image))
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath)
+            }
+        }
 
-module.exports = { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOneCar }
+        await CarProduct.findByIdAndDelete(req.params.id);
+
+        res.json({ message: "Car deleted successfully" });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+module.exports = { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOneCar, deleteProduct }

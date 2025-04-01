@@ -8,6 +8,8 @@ import { MdDelete } from "react-icons/md";
 
 const AdminCarComponent = () => {
     const [cars, setCars] = useState([])
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -27,15 +29,21 @@ const AdminCarComponent = () => {
     }
 
     const handleDelete = async (id) => {
-        // if (window.confirm('Are you sure you want to delete this car?')) {
-        //     try {
-        //         await axios.delete(`/car/delete/${id}`)
-        //         // Refresh the list after deletion
-        //         setCars(cars.filter(car => car._id !== id))
-        //     } catch (error) {
-        //         console.log(error)
-        //     }
-        // }
+        console.log(id)
+        if (!window.confirm("Are you sure you want to delete this car? This action cannot be undone.")) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            await axios.delete(`/car/delete/${id}`);
+            setLoading(false);
+            navigate('/admin/cars');
+        } catch (err) {
+            setError('Failed to delete car');
+            setLoading(false);
+            console.error(err);
+        }
     }
 
     return (
