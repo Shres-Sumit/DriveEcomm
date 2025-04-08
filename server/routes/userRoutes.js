@@ -1,10 +1,12 @@
 const express = require('express')
-const { userSignIn, userLogin, getAllUser, updateUser, userResetPassword, emailCheck } = require('../controller/userController')
+const { userSignIn, userLogin, getAllUser, updateUser, userResetPassword, emailCheck, verifyEmailOTP, resendVerificationOTP } = require('../controller/userController')
 const { requireSign, isAdmin } = require('../helper/jwt')
 
 const userRoute = express.Router()
 
 userRoute.post('/signup', userSignIn)
+userRoute.post('/verify-email', verifyEmailOTP);
+userRoute.post('/resend-otp', resendVerificationOTP);
 userRoute.post('/login', userLogin)
 userRoute.get('/getAllUser', requireSign, isAdmin, getAllUser)
 userRoute.get('/admin-auth', requireSign, isAdmin, (req, res) => {

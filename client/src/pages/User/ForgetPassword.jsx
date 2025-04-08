@@ -31,7 +31,7 @@ const ForgetPassword = () => {
         }
     };
 
-    // Handle Password Reset
+
     const handleResetPassword = async (e) => {
         e.preventDefault();
         setError("");
@@ -43,7 +43,7 @@ const ForgetPassword = () => {
             const { data } = await axios.post("/user/reset-password", { email, password });
             if (data.success) {
                 toast.success("Password reset successful!", { duration: 2000 });
-                setTimeout(() => navigate("/login"), 2000); // Redirect to login after 2 sec
+                setTimeout(() => navigate("/login"), 2000);
             } else {
                 setError("Failed to reset password");
             }

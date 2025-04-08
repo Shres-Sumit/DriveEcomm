@@ -5,103 +5,124 @@ const jwt = require('jsonwebtoken')
 const { userInfo } = require("../models/userModel");
 const transporter = require('../helper/sendMail');
 
+const otpStore = new Map();
+
 const userSignIn = async (req, res) => {
     try {
-        const { firstName, lastName, email, phone, address, userName, password, confirmPassword } = req.body
-        if (!firstName || !lastName || !email || !phone || !address || !userName || !password || !confirmPassword) {
-            return res.status(400).json({
-                success: false,
-                message: 'All fields are need to be fullfilled',
-            });
-        }
-        const existingUser = await userInfo.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({
-                success: false,
-                message: 'User with this email already exists'
-            });
-        }
+        const { firstName, lastName, email, phone, address, userName, password, confirmPassword } = req.body;
 
-        if (password !== confirmPassword) {
-            return res.status(400).json({
-                success: false,
-                message: "Passwords do not match"
-            });
-        }
-        const existingUserwithuserName = await userInfo.findOne({ userName });
-        if (existingUserwithuserName) {
-            return res.status(400).json({
-                success: false,
-                message: "Username already exists"
-            });
-        }
-        if (password.length < 6) {
-            return res.status(400).json({
-                success: false,
-                message: "Password must be at least 6 characters long"
-            });
-        }
-        let newUser = new userInfo({
+
+        if (!firstName || !lastName || !email || !phone || !address || !userName || !password || !confirmPassword)
+            return res.status(400).json({ success: false, message: 'All fields are required' });
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email))
+            return res.status(400).json({ success: false, message: 'Invalid email format' });
+
+        if (await userInfo.findOne({ email }))
+            return res.status(400).json({ success: false, message: 'Email already exists' });
+
+        if (await userInfo.findOne({ userName }))
+            return res.status(400).json({ success: false, message: 'Username already exists' });
+
+        if (password !== confirmPassword)
+            return res.status(400).json({ success: false, message: 'Passwords do not match' });
+
+        if (password.length < 6)
+            return res.status(400).json({ success: false, message: 'Password too short' });
+
+        const newUser = new userInfo({
             firstName,
             lastName,
             email,
             phone,
             address,
             userName,
-            hashPassword: bcrypt.hashSync(password, 10)
-        })
+            hashPassword: bcrypt.hashSync(password, 10),
+            isEmailVerified: false
+        });
+
+        await newUser.save();
 
 
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
 
-        const savedUser = await newUser.save();
+        otpStore.set(email, { otp, otpExpiry });
 
-        if (!savedUser) {
-            return res.status(400).json({
-                success: false,
-                message: 'Failed to create user'
-            });
-        }
 
-        const token = jwt.sign(
-            { id: savedUser._id, email: savedUser.email },
-            process.env.Secret,
-            { expiresIn: '1h' }
-        )
-
-        const verificationLink = `http://localhost:${process.env.PORT}/verify-email?token=${token}`
-        const mailOption = {
+        await transporter.sendMail({
             from: process.env.MAILTRAP_USER,
-            to: savedUser.email,
-            subject: 'Email Verification',
-            html: `
-                <p>Hi ${savedUser.firstName},</p>
-                <p>Thank you for signing up. Please verify your email by clicking the link below:</p>
-                <a href="${verificationLink}">Verify Email</a>
-                <p>This link will expire in 24 hours.</p>
-            `,
-        }
-
-        await transporter.sendMail(mailOption)
-
-        const userResponse = savedUser.toObject();
-        console.log(userResponse)
-        delete userResponse.hashPassword;
+            to: email,
+            subject: 'Your OTP Code',
+            html: `<p>Hi ${firstName},</p><p>Your OTP is:</p><h2>${otp}</h2><p>Expires in 15 mins.</p>`
+        });
 
         res.status(201).json({
             success: true,
-            message: 'User created successfully',
-            user: userResponse
+            message: 'User created. OTP sent to email.'
         });
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error',
-            error: error.message
-        });
+    } catch (err) {
+        console.error('Signup Error:', err);
+        res.status(500).json({ success: false, message: 'Internal server error', error: err.message });
     }
-}
+};
 
+const verifyEmailOTP = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        if (!email || !otp) return res.status(400).json({ success: false, message: 'Email and OTP required' });
+
+        const user = await userInfo.findOne({ email });
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+        const stored = otpStore.get(email);
+        if (!stored) return res.status(400).json({ success: false, message: 'OTP not requested or expired' });
+
+        if (stored.otp !== otp)
+            return res.status(400).json({ success: false, message: 'Invalid OTP' });
+
+        if (new Date() > stored.otpExpiry)
+            return res.status(400).json({ success: false, message: 'OTP expired' });
+
+        // Set verified and clear OTP
+        user.isEmailVerified = true;
+        await user.save();
+
+        otpStore.delete(email); // Clear from memory
+
+        const token = jwt.sign({ id: user._id, email: user.email, isEmailVerified: true }, process.env.Secret, { expiresIn: '30d' });
+
+        res.status(200).json({ success: true, message: 'Email verified successfully', token });
+    } catch (err) {
+        console.error('OTP Verification Error:', err);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+const resendVerificationOTP = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await userInfo.findOne({ email });
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpiry = new Date(Date.now() + 15 * 60 * 1000);
+        otpStore.set(email, { otp, otpExpiry });
+
+        await transporter.sendMail({
+            from: process.env.MAILTRAP_USER,
+            to: email,
+            subject: 'Your new OTP',
+            html: `<p>Hi ${user.firstName},</p><p>Your new OTP is:</p><h2>${otp}</h2><p>Expires in 15 mins.</p>`
+        });
+
+        res.status(200).json({ success: true, message: 'New OTP sent to email.' });
+    } catch (err) {
+        console.error('Resend OTP Error:', err);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
 
 
 
@@ -191,4 +212,4 @@ const emailCheck = async (req, res) => {
     res.json({ success: true });
 }
 
-module.exports = { userSignIn, userLogin, getAllUser, updateUser, userResetPassword, emailCheck }
+module.exports = { userSignIn, userLogin, getAllUser, updateUser, userResetPassword, emailCheck, verifyEmailOTP, resendVerificationOTP }
