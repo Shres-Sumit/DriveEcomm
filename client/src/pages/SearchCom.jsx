@@ -32,7 +32,7 @@ const SearchCom = () => {
                                 </div>
                                 <div className="text-center">
                                     <h3 className="font-bold text-lg">{car.title} </h3>
-                                    <p className="font-semibold text-xl text-blue-600">${car.price}</p>
+                                    <p className="font-semibold text-xl text-blue-600">Rs {car.price}</p>
                                 </div>
                             </Link>
                         ))}

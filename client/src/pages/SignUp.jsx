@@ -15,7 +15,7 @@ const SignUp = () => {
         address: "",
         userName: "",
     });
-    const [error, setError] = useState(null);
+
 
     const handleChange = (e) => {
         setdata({
@@ -61,8 +61,8 @@ const SignUp = () => {
     return (
         <>
             <Toaster />
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 via-green-500 to-green-500 ">
-                <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8">
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="w-full max-w-4xl bg-white rounded-lg shadow-2xl p-8">
                     <form className="grid gap-6" onSubmit={handleSubmit}>
                         <h2 className="text-4xl font-bold text-center text-gray-900 mb-4 uppercase">Sign Up</h2>
                         <div className="grid grid-cols-2 gap-4">
@@ -192,7 +192,7 @@ const SignUp = () => {
 
                         <button
                             type="submit"
-                            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-center font-medium"
+                            className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md text-center font-medium"
                         >
                             Register
                         </button>

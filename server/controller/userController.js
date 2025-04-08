@@ -136,7 +136,7 @@ const userLogin = async (req, res) => {
             console.log(req.user)
         }
         else {
-            res.status(400).send('password is wrong!');
+            res.status(400).send({ success: false, message: 'invalid password or email' });
         }
     } catch (error) {
         console.log(error)

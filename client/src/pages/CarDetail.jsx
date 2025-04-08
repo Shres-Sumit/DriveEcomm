@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import TestDriveBookingModal from '../components/TestDriveBookingModal'
 import toast, { Toaster } from 'react-hot-toast'
@@ -8,7 +8,8 @@ import toast, { Toaster } from 'react-hot-toast'
 const CarDetail = () => {
     const { slug } = useParams()
     const [carDetails, setCarDetails] = useState(null)
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const navigate = useNavigate()
 
     async function getCarDetail() {
         try {
@@ -19,36 +20,48 @@ const CarDetail = () => {
         }
     }
 
+    // Check if user is logged in
+    const isAuthenticated = () => {
+        return localStorage.getItem('auth') !== null
+    }
 
-
-
+    // Handle authentication check and redirect if needed
+    const checkAuthAndProceed = (action) => {
+        if (!isAuthenticated()) {
+            toast.error('Please login to continue')
+            navigate('/login')
+            return false
+        }
+        return true
+    }
 
     async function handleAddToCart() {
+        if (!checkAuthAndProceed()) return
 
         try {
             const { data } = await axios.post('/shop/create-cart', { productIds: [carDetails._id] })
-            console.log(data)
-            if (data.duplicateProducts?.length > 0) {
-                toast.error('2 This car is already in your cart')
-            }
-            else {
 
+            if (data.duplicateProducts?.length > 0) {
+                toast.error('This car is already in your cart')
+            } else {
                 toast.success('Added to cart successfully')
             }
-
-
         } catch (error) {
-            if (error.response?.status === 400) {
-                toast.error('Please login to add items to cart')
-            } else {
-                toast.error('Error adding to cart. Please try again.')
-            }
+            toast.error('Error adding to cart. Please try again.')
             console.error('Add to cart error:', error)
         }
     }
+
+    const handleTestDriveClick = () => {
+        if (checkAuthAndProceed()) {
+            setIsModalOpen(true)
+        }
+    }
+
     useEffect(() => {
         getCarDetail()
     }, [])
+
     return (
         <>
             <Layout>
@@ -60,7 +73,7 @@ const CarDetail = () => {
                             <img
                                 src={carDetails.image}
                                 alt={`${carDetails.title} ${carDetails.year}`}
-                                className="max-w-full h-[400px] object-contain"
+                                className="max-w-full h-96 object-contain"
                             />
                         </div>
 
@@ -70,7 +83,7 @@ const CarDetail = () => {
                             <div className="border-b pb-4">
                                 <h1 className="text-5xl font-bold text-gray-900 mb-2">{carDetails.title}</h1>
                                 <div className="text-3xl font-extrabold text-blue-600">
-                                    ${carDetails.price.toLocaleString()}
+                                    Rs {carDetails.price.toLocaleString()}
                                 </div>
                             </div>
 
@@ -101,18 +114,22 @@ const CarDetail = () => {
 
                             {/* Action Buttons */}
                             <div className="flex space-x-4">
-                                <button className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition" onClick={handleAddToCart} >
+                                <button
+                                    className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+                                    onClick={handleAddToCart}
+                                >
                                     Add to Cart
                                 </button>
-                                <button className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition" onClick={() => setIsModalOpen(true)}>
+                                <button
+                                    className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition"
+                                    onClick={handleTestDriveClick}
+                                >
                                     Book Test Drive
                                 </button>
                                 <TestDriveBookingModal
                                     open={isModalOpen}
                                     onClose={() => setIsModalOpen(false)}
-
                                     carId={carDetails._id}
-
                                 />
                             </div>
                         </div>
@@ -122,13 +139,9 @@ const CarDetail = () => {
                         <p className="text-lg text-gray-600">Loading car details...</p>
                     </div>
                 )}
-
-
-            </Layout >
+            </Layout>
         </>
     )
 }
-
-
 
 export default CarDetail

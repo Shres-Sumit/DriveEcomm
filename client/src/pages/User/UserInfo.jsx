@@ -182,21 +182,14 @@ const UserInfo = () => {
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <h1 className="text-gray-600 text-sm font-medium">DEFAULT SHIPPING ADDRESS</h1>
+                                    <h1 className="text-gray-600 text-sm font-medium">DEFAULT  ADDRESS</h1>
                                     <p className="text-black  font-medium mt-2 uppercase" >
                                         {`${user.firstName} ${user.lastName}`}
                                     </p>
                                     <p className="text-black  capitalize text-sm">{user.address}</p>
                                     <p className="text-black text-sm">(+977) {user.phone}</p>
                                 </div>
-                                <div>
-                                    <h3 className="text-gray-600  font-medium">DEFAULT BILLING ADDRESS</h3>
-                                    <p className="text-black  font-medium mt-2 uppercase " >
-                                        {`${user.firstName} ${user.lastName}`}
-                                    </p>
-                                    <p className="text-black capitalize text-sm">{user.address}</p>
-                                    <p className="text-black text-sm">(+977) {user.phone}</p>
-                                </div>
+
                             </div>
                         )}
                     </div>
@@ -223,7 +216,7 @@ const UserInfo = () => {
                                 </div>
                                 <div className="text-center">
                                     <h3 className="font-bold text-lg">{car.title} </h3>
-                                    <p className="font-semibold text-xl text-blue-600">${car.price}</p>
+                                    <p className="font-semibold text-xl text-blue-600">Rs {car.price}</p>
                                 </div>
                             </Link>
 

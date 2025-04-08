@@ -8,8 +8,6 @@ import { MdDelete } from "react-icons/md";
 
 const AdminCarComponent = () => {
     const [cars, setCars] = useState([])
-    const [error, setError] = useState(null)
-    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -72,7 +70,7 @@ const AdminCarComponent = () => {
                                 </div>
                                 <div className="text-center">
                                     <h3 className="font-bold text-lg">{car.title}</h3>
-                                    <p className="font-semibold text-xl text-blue-600">${car.price}</p>
+                                    <p className="font-semibold text-xl text-blue-600">Rs {car.price}</p>
                                 </div>
                             </Link>
                             {/* Edit and Delete Buttons */}

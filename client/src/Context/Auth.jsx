@@ -50,7 +50,6 @@ const CarProviders = ({ children }) => {
     const getAllCars = async () => {
         try {
             const { data } = await axios.get('/car/getAllcars')
-            // console.log(data)
             setCarsList(data.productList)
         } catch (error) {
             console.log(error)

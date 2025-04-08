@@ -14,7 +14,7 @@ const Sidebar = () => {
                         <NavLink to="/admin/cars" className={({ isActive }) => `block p-2 rounded cursor-pointer ${isActive ? "bg-gray-600" : "hover:bg-gray-700"} `}>Manage Cars</NavLink>
                     </li>
                     <li >
-                        <NavLink to="/admin/users" className={({ isActive }) => `block p-2 rounded cursor-pointer ${isActive ? "bg-gray-600" : "hover:bg-gray-700"} `}>User Management</NavLink>
+                        <NavLink to="/admin/users" className={({ isActive }) => `block p-2 rounded cursor-pointer ${isActive ? "bg-gray-600" : "hover:bg-gray-700"} `}>User List</NavLink>
                     </li>
                 </ul>
             </nav>
