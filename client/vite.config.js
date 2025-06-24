@@ -25,7 +25,20 @@ export default defineConfig({
         target: 'http://localhost:5050',
         changeOrigin: true,
         secure: false
-      }
+      },
+      '/purchase': {
+        target: 'http://localhost:5050',
+        changeOrigin: true,
+        secure: false
+      },
+
+      '/payment': {
+        target: 'http://localhost:5050',
+        changeOrigin: true,
+        secure: false
+      },
+
+
 
 
     }

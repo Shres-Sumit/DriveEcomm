@@ -34,10 +34,12 @@ const DashBoardHome = () => {
                 const { data } = await axios.get("/testDrive/book-test-drive");
                 console.log(data);
                 const formattedTestDrives = data.date.map((drive) => ({
-                    userId: drive.user,
-                    carId: drive.car,
+                    id: drive._id, // Adding id for handling approvals/cancellations
+                    userId: drive.user_id,
+                    carId: drive.car_id,
                     date: drive.date[0]?.date || drive.date, // Handling array structure
                     createdAt: drive.createdAt,
+                    status: drive.status || 'pending' // Adding default status
                 }));
                 setTestDrives(formattedTestDrives);
             } catch (error) {
@@ -87,6 +89,57 @@ const DashBoardHome = () => {
         );
     };
 
+    const handleApprove = async (testDriveId) => {
+        try {
+            // Replace with your actual API endpoint
+            await axios.put(`/testDrive/update-status/${testDriveId}`, {
+                status: 'approved'
+            });
+
+            // Update local state to reflect change
+            setTestDrives(prevDrives =>
+                prevDrives.map(drive =>
+                    drive.id === testDriveId ? { ...drive, status: 'approved' } : drive
+                )
+            );
+        } catch (error) {
+            console.error("Error approving test drive:", error);
+            alert("Failed to approve test drive. Please try again.");
+        }
+    };
+
+    const handleCancel = async (testDriveId) => {
+        try {
+            // Replace with your actual API endpoint
+            await axios.put(`/testDrive/update-status/${testDriveId}`, {
+                status: 'cancelled'
+            });
+
+            // Update local state to reflect change
+            setTestDrives(prevDrives =>
+                prevDrives.map(drive =>
+                    drive.id === testDriveId ? { ...drive, status: 'cancelled' } : drive
+                )
+            );
+        } catch (error) {
+            console.error("Error cancelling test drive:", error);
+            alert("Failed to cancel test drive. Please try again.");
+        }
+    };
+
+    // Helper function to get status styling
+    const getStatusStyles = (status) => {
+        switch (status) {
+            case 'approved':
+                return 'bg-green-100 text-green-800 font-medium';
+            case 'cancelled':
+                return 'bg-red-100 text-red-800 font-medium';
+            default:
+                return 'bg-yellow-100 text-yellow-800 font-medium';
+        }
+    };
+    console.log(testDrives);
+
     return (
         <Layout>
             <AdminLayout>
@@ -120,6 +173,8 @@ const DashBoardHome = () => {
                                         <th className="py-3 px-4 border border-gray-300 text-left">Car</th>
                                         <th className="py-3 px-4 border border-gray-300 text-left">Booking Date</th>
                                         <th className="py-3 px-4 border border-gray-300 text-left">Test Drive Date</th>
+                                        <th className="py-3 px-4 border border-gray-300 text-left">Status</th>
+                                        <th className="py-3 px-4 border border-gray-300 text-left">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -147,19 +202,52 @@ const DashBoardHome = () => {
                                                     <td className="py-3 px-4 border border-gray-300 bg-blue-100 text-blue-900 font-semibold">
                                                         {formatDate(drive.date)}
                                                     </td>
+                                                    <td className={`py-3 px-4 border border-gray-300 ${getStatusStyles(drive.status)}`}>
+                                                        {drive.status ? drive.status.charAt(0).toUpperCase() + drive.status.slice(1) : 'Pending'}
+                                                    </td>
+                                                    <td className="py-3 px-4 border border-gray-300 bg-gray-50">
+                                                        <div className="flex gap-2">
+                                                            {drive.status !== 'approved' && (
+                                                                <button
+                                                                    onClick={() => handleApprove(drive.id)}
+                                                                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                                                                    disabled={drive.status === 'cancelled'}
+                                                                >
+                                                                    Approve
+                                                                </button>
+                                                            )}
+
+                                                            {drive.status !== 'cancelled' && (
+                                                                <button
+                                                                    onClick={() => handleCancel(drive.id)}
+                                                                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                                                                    disabled={drive.status === 'approved'}
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                            )}
+
+                                                            {drive.status === 'approved' && (
+                                                                <span className="text-green-600 font-medium">Approved</span>
+                                                            )}
+
+                                                            {drive.status === 'cancelled' && (
+                                                                <span className="text-red-600 font-medium">Cancelled</span>
+                                                            )}
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             );
                                         })
                                     ) : (
                                         <tr>
-                                            <td colSpan="4" className="text-center py-4 text-gray-500 border border-gray-300">
+                                            <td colSpan="6" className="text-center py-4 text-gray-500 border border-gray-300">
                                                 No test drives found
                                             </td>
                                         </tr>
                                     )}
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>

@@ -61,6 +61,7 @@ const CarDetail = () => {
     useEffect(() => {
         getCarDetail()
     }, [])
+    console.log(carDetails)
 
     return (
         <>

@@ -5,7 +5,6 @@ const carProductSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-
     model: {
         type: String,
         required: true,
@@ -37,12 +36,6 @@ const carProductSchema = new mongoose.Schema({
     vehicleType: {
         type: String,
         default: 'normal'
-
-    },
-    mileage: {
-        type: Number,
-        default: 0,
-        min: 0
     },
     fuelType: {
         type: String,
@@ -63,6 +56,12 @@ const carProductSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    stock: {
+        type: Number,
+        required: true,
+        default: 1,
+        min: 0
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -74,8 +73,6 @@ const carProductSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
-
-
 
 const CarProduct = mongoose.model('CarProduct', carProductSchema);
 

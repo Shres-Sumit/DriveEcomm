@@ -7,19 +7,30 @@ const CarProduct = require("../models/productModel")
 
 const createProduct = async (req, res) => {
     try {
-        const { title, model, year, color, price, description, mileage, fuelType, transmission, vehicleType } = req.body
+        const {
+            title,
+            model,
+            year,
+            color,
+            price,
+            description,
+            mileage,
+            fuelType,
+            transmission,
+            vehicleType,
+            stock // <-- Add stock from req.body
+        } = req.body;
+
         if (!title || !model || !year || !color || !price || !description || !mileage || !fuelType || !transmission) {
-            return res.status(400).json({ success: false, message: "please fill all the fields" })
+            return res.status(400).json({ success: false, message: "Please fill all the required fields" });
         }
 
         const file = req.file;
-        console.log(file);
+        if (!file) return res.status(400).send('No image in the request');
+        const filename = file.filename;
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
 
-        if (!file) return res.status(400).send('No image in the request')
-        const filename = file.filename
-
-        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`
-        let car = new CarProduct({
+        const car = new CarProduct({
             title,
             model,
             year,
@@ -31,21 +42,24 @@ const createProduct = async (req, res) => {
             fuelType,
             transmission,
             vehicleType,
-            mileage
-        })
-        car = await car.save()
-        if (!car)
-            return res.status(500).send('The product cannot be created')
+            mileage,
+            stock: stock || 1
+        });
 
-        else {
-            res.status(201).json({ success: true, car })
+        const savedCar = await car.save();
+
+        if (!savedCar) {
+            return res.status(500).send('The product cannot be created');
         }
 
+        res.status(201).json({ success: true, car: savedCar });
+
     } catch (error) {
-        console.log(error)
-        res.status(500).json({ success: false, message: error })
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message || "Something went wrong" });
     }
-}
+};
+
 
 const getAllProduct = async (req, res) => {
     try {
@@ -85,7 +99,7 @@ const getProductBySlug = async (req, res) => {
         res.status(200).json({ success: true, car })
     } catch (error) {
         console.log(error)
-        es.status(500).json({ success: false, message: 'Server error', error: error.message })
+        res.status(500).json({ success: false, message: 'Server error', error: error.message })
     }
 }
 const getOneCar = async (req, res) => {
@@ -129,4 +143,27 @@ const deleteProduct = async (req, res) => {
     }
 }
 
-module.exports = { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOneCar, deleteProduct }
+const updateCar = async (req, res) => {
+    try {
+        const carId = req.params.id;
+        const updatedData = req.body;
+
+
+        if (updatedData.stock > 10) {
+            return res.status(400).json({ error: 'Stock cannot be more than 10' });
+        }
+
+        const updatedCar = await CarProduct.findByIdAndUpdate(carId, updatedData, { new: true });
+
+        if (!updatedCar) {
+            return res.status(404).json({ error: 'Car not found' });
+        }
+
+        res.status(200).json({ message: 'Car updated successfully', car: updatedCar });
+    } catch (error) {
+        console.error('Error updating car:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
+
+module.exports = { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOneCar, deleteProduct, updateCar }

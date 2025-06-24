@@ -11,9 +11,7 @@ const TestDriveBookingModal = ({ open, onClose, carId }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [auth] = useAuth();
 
-    const formatDateToYYYYMMDD = (date) => {
-        return date.toISOString().split('T')[0];  // Returns YYYY-MM-DD
-    };
+
 
     const handleBook = async () => {
         if (!selectedDate) {
@@ -25,26 +23,40 @@ const TestDriveBookingModal = ({ open, onClose, carId }) => {
             toast.error('Please login to book a test drive');
             return;
         }
+        console.log(carId)
+
+
 
         setIsLoading(true);
         try {
-            const formattedDate = formatDateToYYYYMMDD(selectedDate);
-            console.log(formattedDate);
-
-            const { data } = await axios.post('/testDrive/book-test-drive', {
-                date: formattedDate,
+            console.log(carId)
+            const { data } = await axios.post('/payment/initiate-esewa', {
+                amount: 10,
                 userId: auth?.user?._id,
                 carId: carId
-            });
+            })
+            var path = "https://rc-epay.esewa.com.np/api/epay/main/v2/form"
+            var form = document.createElement('form');
+            form.setAttribute('method', 'POST');
+            form.setAttribute('action', path);
 
-            if (data?.booking) {
-                toast.success('Test drive booked successfully!');
-                onClose();
+            for (var key in data.formData) {
+                var hiddenField = document.createElement('input');
+                hiddenField.setAttribute('type', 'hidden');
+                hiddenField.setAttribute('name', key);
+                hiddenField.setAttribute('value', data.formData[key]);
+                form.appendChild(hiddenField);
             }
+
+            document.body.appendChild(form);
+            form.submit();
+
+
+
         } catch (error) {
-            const errorMessage = error.response?.data?.error || 'Failed to book test drive. Please try again.';
+            const errorMessage = error.response?.data?.error || 'Failed to initiate payment.';
             toast.error(errorMessage);
-            console.error('Test drive booking error:', error);
+            console.error('Payment initiation error:', error);
         } finally {
             setIsLoading(false);
         }
@@ -61,7 +73,7 @@ const TestDriveBookingModal = ({ open, onClose, carId }) => {
         return null;
     };
 
-    // Custom CSS for the calendar
+
     const calendarStyles = `
         .react-calendar {
             width: 100%;
@@ -191,7 +203,7 @@ const TestDriveBookingModal = ({ open, onClose, carId }) => {
                     variant="contained"
                     disabled={isLoading || !selectedDate}
                 >
-                    {isLoading ? 'Booking...' : 'Confirm Booking'}
+                    {isLoading ? 'Processing eSewa Payment...' : 'Confirm Booking with eSewa'}
                 </Button>
             </DialogActions>
         </Dialog>

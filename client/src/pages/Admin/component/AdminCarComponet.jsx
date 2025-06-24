@@ -71,9 +71,13 @@ const AdminCarComponent = () => {
                                 <div className="text-center">
                                     <h3 className="font-bold text-lg">{car.title}</h3>
                                     <p className="font-semibold text-xl text-blue-600">Rs {car.price}</p>
+                                    <p className="text-sm text-gray-700">
+                                        Stock: <span className="text-2xl font-bold text-gray-700">{car.stock}</span>
+                                    </p>
                                 </div>
+
                             </Link>
-                            {/* Edit and Delete Buttons */}
+
                             <div className="flex justify-between mt-4">
                                 <button
                                     className="bg-blue-500 text-white px-4 py-2 rounded-sm hover:bg-blue-600 transition-colors duration-200 ease-in-out"

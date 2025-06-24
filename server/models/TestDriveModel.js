@@ -5,14 +5,19 @@ const TestDriveSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    user: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'userInfo',
         required: true
     },
-    car: {
+    car_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'CarProduct'
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'confirmed', 'cancelled'],
+        default: 'pending'
     },
     createdAt: {
         type: Date,

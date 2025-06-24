@@ -13,10 +13,12 @@ const userRoute = require('./routes/userRoutes')
 const { productRoute, imageRoute } = require('./routes/productRoute');
 const OrderRoute = require('./routes/orderRoute');
 const cartRoute = require('./routes/cartRoute');
-const sendMail = require('./helper/sendMail');
+
 const verifyRoute = require('./routes/verificationRoute');
-const transporter = require('./helper/sendMail');
 const testDriveRoute = require('./routes/testDriveRoute');
+const { purchaseRouter } = require('./routes/purchaseRoue');
+const { PaymentRouter } = require('./routes/paymentRoute');
+
 
 
 dotenv.config()
@@ -42,6 +44,8 @@ app.use('/car', productRoute)
 app.use('/order', OrderRoute)
 app.use('/shop', cartRoute)
 app.use('/testDrive', testDriveRoute)
+app.use('/purchase', purchaseRouter)
+app.use('/payment', PaymentRouter)
 
 app.use('/', imageRoute)
 app.use('/', verifyRoute)

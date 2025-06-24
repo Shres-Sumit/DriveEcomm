@@ -17,17 +17,18 @@ const CarModify = () => {
         model: '',
         year: '',
         price: '',
-        mileage: '',
         color: '',
         condition: '',
         class: '',
         description: '',
         fuelType: '',
         transmission: '',
-        image: ''
+        image: '',
+        stock: 0  // <-- added
     });
 
-    // Fetch car data on component mount
+
+
     useEffect(() => {
         const fetchCarDetails = async () => {
             try {
@@ -41,7 +42,6 @@ const CarModify = () => {
                 console.error(err);
             }
         };
-
         fetchCarDetails();
     }, [slug]);
 
@@ -50,13 +50,18 @@ const CarModify = () => {
         const { name, value } = e.target;
         setCarData({
             ...carData,
-            [name]: name === 'price' || name === 'year' || name === 'mileage' ? Number(value) : value
+            [name]: name === 'price' || name === 'year' ? Number(value) : value
         });
     };
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (carData.stock > 10) {
+            setError('Stock cannot be more than 10');
+            return;
+        }
         try {
             setLoading(true);
             await axios.put(`/car/update/${carData._id}`, carData);
@@ -69,7 +74,8 @@ const CarModify = () => {
         }
     };
 
-    // Handle image upload
+
+
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -169,17 +175,24 @@ const CarModify = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="mileage" className="block text-sm font-medium text-gray-700">Mileage</label>
+                                <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
                                 <input
                                     type="number"
-                                    id="mileage"
-                                    name="mileage"
-                                    value={carData.mileage}
+                                    id="stock"
+                                    name="stock"
+                                    value={carData.stock}
                                     onChange={handleChange}
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
                                     required
+                                    min={0}
+                                    max={10}
                                 />
+                                {carData.stock > 10 && (
+                                    <p className="text-red-500 text-sm mt-1">Stock cannot exceed 10</p>
+                                )}
                             </div>
+
+
 
                             <div>
                                 <label htmlFor="color" className="block text-sm font-medium text-gray-700">Color</label>
@@ -212,17 +225,6 @@ const CarModify = () => {
                                 </select>
                             </div>
 
-                            <div>
-                                <label htmlFor="class" className="block text-sm font-medium text-gray-700">Class</label>
-                                <input
-                                    type="text"
-                                    id="class"
-                                    name="class"
-                                    value={carData.class}
-                                    onChange={handleChange}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-                                />
-                            </div>
 
                             <div>
                                 <label htmlFor="fuelType" className="block text-sm font-medium text-gray-700">Fuel Type</label>

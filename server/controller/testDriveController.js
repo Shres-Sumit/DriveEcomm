@@ -1,9 +1,9 @@
 const TestDriveBooking = require("../models/TestDriveModel");
 
 const createTestDrive = async (req, res) => {
-    const { date, userId, carId } = req.body;
+    const { date, user_id, car_id } = req.body;
 
-    if (!date || !userId || !carId) {
+    if (!date || !user_id || !car_id) {
         return res.status(400).json({
             error: 'Date, User ID, and Car ID are required'
         });
@@ -18,14 +18,10 @@ const createTestDrive = async (req, res) => {
             });
         }
 
-
-
-
-
         const newBooking = new TestDriveBooking({
             date: bookingDate,
-            user: userId,
-            car: carId
+            user_id,
+            car_id
         });
 
         await newBooking.save();
@@ -57,4 +53,50 @@ const getAllTestDrive = async (req, res) => {
     }
 }
 
-module.exports = { createTestDrive, getAllTestDrive };
+const UpdateTestDriveStatus = async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const allowedStatuses = ['approved', 'cancelled'];
+    if (!allowedStatuses.includes(status)) {
+        return res.status(400).json({ message: 'Invalid status' });
+    }
+
+    try {
+        const updatedBooking = await TestDriveBooking.findByIdAndUpdate(
+            id,
+            { status },
+            { new: true }
+        );
+
+        if (!updatedBooking) {
+            return res.status(404).json({
+                error: 'Test drive booking not found'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Test drive status updated successfully',
+            booking: updatedBooking
+        });
+    } catch (error) {
+        console.error('Error updating test drive status:', error);
+        res.status(500).json({
+            error: 'Failed to update status. Please try again.'
+        });
+    }
+}
+
+const getUserTestDrives = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const testDrives = await TestDriveBooking.find({ user_id }).populate('car_id');
+        res.status(200).json(testDrives);
+        console.log(testDrives)
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching test drives.' });
+    }
+}
+module.exports = { createTestDrive, getAllTestDrive, UpdateTestDriveStatus, getUserTestDrives };

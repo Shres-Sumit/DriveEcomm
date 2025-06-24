@@ -15,15 +15,11 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(datas);
         try {
             const { data } = await axios.post(`/user/login`, datas);
-            console.log(data);
             if (data.success) {
                 localStorage.setItem('auth', JSON.stringify(data));
-                toast.success('User login successful', {
-                    duration: 5000
-                });
+                toast.success('User login successful', { duration: 5000 });
                 setAuth({
                     user: data.user,
                     token: data.token
@@ -31,7 +27,6 @@ const Login = () => {
                 navigate('/');
             }
         } catch (error) {
-            console.log(error);
             if (error.response) {
                 setError(error.response.data.message || 'An error occurred');
             } else if (error.request) {
@@ -54,14 +49,17 @@ const Login = () => {
             <Toaster />
             <div className="min-h-screen flex items-center justify-center bg-gray-200">
                 <div className="flex w-full max-w-4xl bg-white rounded-lg shadow-lg">
+
                     {/* Login Form Section */}
                     <div className="w-1/2 p-6">
                         <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">Login</h2>
+
                         {error && (
                             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                                 <span className="block sm:inline">{error}</span>
                             </div>
                         )}
+
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-2">
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-900">
@@ -92,7 +90,6 @@ const Login = () => {
                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                                     onChange={handleChange}
                                 />
-                                {/* Forgot Password Button */}
                                 <div className="text-right">
                                     <button
                                         type="button"

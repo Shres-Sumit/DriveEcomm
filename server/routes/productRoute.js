@@ -1,5 +1,5 @@
 const express = require('express')
-const { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOneCar, deleteProduct } = require('../controller/productController')
+const { createProduct, getAllProduct, getImageProduct, getProductBySlug, getOneCar, deleteProduct, updateCar } = require('../controller/productController')
 const uploadOptions = require('../upload/uploader')
 
 
@@ -13,7 +13,7 @@ productRoute.get('/getAllcars', getAllProduct)
 productRoute.get('/getOneCar/:title', getOneCar)
 
 
-
+productRoute.put('/update/:id', updateCar)
 
 productRoute.get('/:slug', getProductBySlug)
 productRoute.delete('/delete/:id', deleteProduct)

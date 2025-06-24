@@ -259,20 +259,26 @@ const CarForm = () => {
                             </div>
 
                             <div>
-                                <label htmlFor="mileage" className="block text-sm font-medium text-gray-700 mb-1">
-                                    Mileage
+                                <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">
+                                    Stock
                                 </label>
                                 <input
-                                    type="text"
-                                    id="mileage"
-                                    name="mileage"
-                                    value={formData.mileage}
+                                    type="number"
+                                    id="stock"
+                                    name="stock"
+                                    value={formData.stock}
                                     onChange={handleChange}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Enter mileage"
+                                    placeholder="Enter stock quantity"
+                                    min="0"
+                                    max="10"
                                     required
                                 />
+                                {formData.stock > 10 && (
+                                    <p className="text-sm text-red-500 mt-1">Stock cannot exceed 10.</p>
+                                )}
                             </div>
+
 
                             <div>
                                 <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">

@@ -40,7 +40,7 @@ const requireSign = async (req, res, next) => {
 
 
 const isAdmin = async (req, res, next) => {
-    // console.log(userId)
+
 
     try {
         const userOne = await userInfo.findById(req.userId)
